@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Promoter/Artist portfolio. 
 
-First, run the development server:
+- Home/about/upcoming shows page, 
+- archive (shows plus gallery), 
+- artists page (portrait, handle, genre, bio)
+- 
+The artist needs to be able to add shows to past shows, add photos for that show's gallery, update their about me, add artists to the artists page.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Planned Stack:
+- Next.js + TS + Tailwind,
+- Neon PostgreSQL (Database + Auth)
+-  Drizzle ORM 
+- Cloudflare R2 (10mil reads a month free and free 10gb),
+-  Vercel Hosting  
+- Maybe: Zod, Markdown for rich text
+## Far future plan: 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Recreate frontend, make an interactive 3d version where each page is a different floor in a building: highest floor is the artists showcase, ground floor is about/upcoming shows.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Floor | Section | Content | Interaction |
+|---|---|---|---|
+| Basement | Archive | Past shows, each in a small room with the show's photos arranged around it | Walk between show rooms and explore photos in context |
+| Ground | Upcoming Shows / About | Upcoming show listings and an NPC with the artist's bio | Approach the character and press a key to open an information panel |
+| Upper | Artists | Artist roster with portraits or plaques, handles, genres, and bios | Walk past or interact with the plaques |
