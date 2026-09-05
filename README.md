@@ -4,16 +4,16 @@
 - Home/about/upcoming shows page, 
 - archive (shows plus gallery), 
 - artists page (portrait, handle, genre, bio)
-- 
+
 The artist needs to be able to add shows to past shows, add photos for that show's gallery, update their about me, add artists to the artists page.
 
 
 ## Planned Stack:
 - Next.js + TS + Tailwind,
 - Neon PostgreSQL (Database + Auth)
--  Drizzle ORM 
+- Drizzle ORM 
 - Cloudflare R2 (10mil reads a month free and free 10gb),
--  Vercel Hosting  
+- Vercel Hosting  
 - Maybe: Zod, Markdown for rich text
 ## Far future plan: 
 
