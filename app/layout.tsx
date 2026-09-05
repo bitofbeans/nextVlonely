@@ -16,8 +16,18 @@ const harmondSemiBld = localFont({
       style: "normal"
     },
   ],
-  variable: "--font-harmond"
+  variable: "--font-harmond-local"
 });
+
+const elgoc = localFont({
+  src: [{
+      path: "./fonts/Elgoc.otf",
+      weight: "400",
+      style: "normal"
+    }],
+  variable: "--font-elgoc-local"
+});
+
 
 export const metadata: Metadata = {
   title: "vlonelyandfriends",
@@ -28,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${harmondSemiBld.className} h-full antialiased`}
+      className={`${harmondSemiBld.variable} ${elgoc.variable} h-full antialiased`}
     >
       <body className="min-h-full min-w-full">
         <Nav />

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { showsTable } from './db/schema';
+import { showsTable } from './schema';
 import { eq, max } from 'drizzle-orm';
 
 
-const db = drizzle(process.env.DATABASE_URL!);
+export const db = drizzle(process.env.DATABASE_URL!);
 
 /* Show:
     id: number;
@@ -15,6 +16,8 @@ const db = drizzle(process.env.DATABASE_URL!);
     ticketUrl?: string;
 	description?: string;
 */
+
+// Functions to manually edit, for testing 
 
 async function addDemoShow() {
     const show: typeof showsTable.$inferInsert = {
@@ -37,5 +40,3 @@ async function removeRecent() {
 
     console.log(deleted.length ? `Removed ID ${deleted[0].id}` : "No shows to delete.")
 }
-
-addDemoShow()
