@@ -3,9 +3,9 @@ import type { CSSProperties } from 'react'
 
 type SVGProps = {
     src: string,
-    top: number,
-    left: number,
-    scale: number,
+    top?: number,
+    left?: number,
+    scale?: number,
     delay?: number,
     duration?: number,
     distance?: number,
@@ -20,7 +20,7 @@ const variantClass: Record<NonNullable<SVGProps['variant']>, string> = {
     'spin-slow': 'animate-spin-slow',
 }
 
-export default function AnimatedSVG({ src, top, left, scale, delay, duration, distance, variant = 'float' }: SVGProps) {
+export default function AnimatedSVG({ src, top = 0, left = 0, scale = 100, delay, duration, distance = 0, variant = 'float' }: SVGProps) {
     const style: CSSProperties = {
         top: `${top}%`,
         left: `${left}%`,

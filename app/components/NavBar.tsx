@@ -1,33 +1,41 @@
 "use client"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 
 
-const navLinks = [
-  { name: 'home', href: "/" },
-  { name: 'archive', href: "/archive" },
-  { name: 'artists', href: "/artists" }
-];
+// const navLinks = [
+//   { name: 'home', href: "/" },
+//   { name: 'archive', href: "/archive" },
+//   { name: 'artists', href: "/artists" }
+// ];
 
 export default function Nav() {
     const pathname = usePathname()
     return (
-        <div className="absolute flex w-full justify-center">
-            <nav className="flex flex-wrap w-full max-w-220 justify-evenly items-center text-center text-xl sm:text-2xl md:text-3xl font-harmond">
-            {navLinks.map((link) => {
-                const isActive = pathname == link.href;
+        <div className="absolute flex w-full justify-center py-4 sm:py-1">
+            <nav className="flex flex-wrap w-full max-w-220 justify-evenly items-center text-center text-3xl sm:text-2xl md:text-3xl font-harmond">
 
-                return (
                     <Link
-                        key={link.href}
-                        href={link.href}
-                        className={`px-3 py-2 sm:p-5 md:p-10 ${isActive ? 'underline decoration-1 underline-offset-2' : ''}`}
-
+                        href="/"
+                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'home' ? 'underline decoration-1 underline-offset-2' : ''}`}
                     >
-                        {link.name}
+                        home
                     </Link>
-                );
-            })}
+                    <Image src='/SVG/verticalStar.svg' alt="star" width={30} height={30} />
+                    <Link
+                        href="/archive"
+                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'archive' ? 'underline decoration-1 underline-offset-2' : ''}`}
+                    >
+                        archive
+                    </Link>
+                    <Image src='/SVG/verticalStar.svg' alt="star" width={30} height={30} />
+                    <Link
+                        href="/artists"
+                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'artists' ? 'underline decoration-1 underline-offset-2' : ''}`}
+                    >
+                        artists
+                    </Link>
             </nav>
     </div>
     )

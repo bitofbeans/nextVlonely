@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className="relative mx-auto my-[25vh] w-[min(94vw,1100px)] sm:w-[min(90vw,1100px)]">
+    <div className="relative mx-auto my-[33vh] sm:my-[20vh] w-[min(94vw,1100px)] sm:w-[min(90vw,1100px)] animate-fade-in">
         <Image
         src="/SVG/vlonelyWhite.svg"
         alt="vlonely"
