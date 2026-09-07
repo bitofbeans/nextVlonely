@@ -47,9 +47,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${harmondSemiBld.variable} ${elgoc.variable} h-full antialiased`}
     >
-      <body className="min-h-full min-w-full">
+      <body className="min-h-full min-w-full overflow-x-hidden">
+        <Nav />
         <main className="flex flex-col flex-1 justify-center items-center w-full">
-          <Nav />
           {children}
         </main>
       </body>

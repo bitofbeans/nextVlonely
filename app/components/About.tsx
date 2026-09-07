@@ -2,16 +2,16 @@ import Image from "next/image"
 
 export default function About() {
     return (
-        <div className="flex flex-row p-9 gap-3 my-15">
-            <div className="flex flex-col py-2 px-10 items-center gap-1" >
-                <a className="p-2" href="https://www.instagram.com/vlonelyandfriends/">
+        <section className="my-12 flex w-full max-w-[70rem] flex-col gap-6 px-5 py-8 sm:my-15 sm:flex-row sm:gap-3 sm:p-9">
+            <div className="flex flex-row items-center justify-center gap-3 sm:flex-col sm:gap-1 sm:px-10 sm:py-2" >
+                <a className="flex size-11 items-center justify-center" href="https://www.instagram.com/vlonelyandfriends/">
                     <Image src="/SVG/instagramLogo.svg" alt="instagram" width={50} height={50} />
                 </a>
-                <a className="p-2" href="https://posh.vip/g/vlonelyfriends">
+                <a className="flex size-11 items-center justify-center" href="https://posh.vip/g/vlonelyfriends">
                     <Image className="aspect-square" src="/SVG/poshLogo.svg" alt="posh" width={55} height={55} />
                 </a>
             </div>
-            <div className="flex flex-col text-[2.8rem]  max-w-220 gap-12 leading-tight">
+            <div className="flex min-w-0 flex-col gap-6 text-[clamp(1.75rem,8vw,2.8rem)] leading-tight sm:gap-12">
                 <p>
                     we throw shows with our friends
                 </p>
@@ -22,6 +22,6 @@ export default function About() {
                     <strong>join vlonely&friends today!</strong>
                 </p>
             </div>
-        </div>
+        </section>
     )
 }

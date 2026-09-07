@@ -12,21 +12,23 @@ const navLinks = [
 export default function Nav() {
     const pathname = usePathname()
     return (
-        <nav className="flex flex-wrap w-full max-w-220 justify-evenly items-center text-center text-xl sm:text-2xl md:text-3xl font-harmond">
-          {navLinks.map((link) => {
-            const isActive = pathname == link.href;
+        <div className="absolute flex w-full justify-center">
+            <nav className="flex flex-wrap w-full max-w-220 justify-evenly items-center text-center text-xl sm:text-2xl md:text-3xl font-harmond">
+            {navLinks.map((link) => {
+                const isActive = pathname == link.href;
 
-            return (
-                <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`px-3 py-2 sm:p-5 md:p-10 ${isActive ? 'underline decoration-1 underline-offset-2' : ''}`}
+                return (
+                    <Link
+                        key={link.href}
+                        href={link.href}
+                        className={`px-3 py-2 sm:p-5 md:p-10 ${isActive ? 'underline decoration-1 underline-offset-2' : ''}`}
 
-                >
-                    {link.name}
-                </Link>
-            );
-          })}
-        </nav>
+                    >
+                        {link.name}
+                    </Link>
+                );
+            })}
+            </nav>
+    </div>
     )
 }

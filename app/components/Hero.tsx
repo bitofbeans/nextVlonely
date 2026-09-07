@@ -3,12 +3,13 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className="relative w-[min(90vw,1100px)] mx-auto my-5 mb-30">
+    <div className="relative mx-auto my-[25vh] w-[min(94vw,1100px)] sm:w-[min(90vw,1100px)]">
         <Image
         src="/SVG/vlonelyWhite.svg"
         alt="vlonely"
         width={1920}
         height={1080}
+        sizes="(max-width: 640px) 94vw, (max-width: 1222px) 90vw, 1100px"
         priority
         />
 
