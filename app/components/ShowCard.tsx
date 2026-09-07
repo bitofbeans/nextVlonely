@@ -33,7 +33,7 @@ export default function ShowCard({
 			)}
 			<div className="p-4 flex flex-col gap-3 ">
 				<div className="bg-gray-800 p-1 text-center rounded-md">
-					<h2 className="text-lg font-semibold">{title}</h2>
+					<h2 className="text-lg font-bold">{title}</h2>
 				</div>
 				<div className="bg-gray-800 p-1 text-center rounded-md">
 					<h3 className="text-lg font-semibold">{localDateTime}</h3>

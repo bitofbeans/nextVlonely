@@ -6,10 +6,59 @@
 }
 
 @theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Fonts */
   --font-elgoc: var(--font-elgoc-local);
   --font-harmond: var(--font-harmond-local);
+  
+  /* Animations */
+  --animate-scroll-left: scroll-left 27s linear infinite;
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  --animate-scroll-right: scroll-right 27s linear infinite;
+  @keyframes scroll-right {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+  
+  --animate-float: float 5s ease-in-out infinite;
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(var(--float-distance, -12px)); }
+  }
+
+  --animate-float-rotate: float-rotate 5s ease-in-out infinite;
+  @keyframes float-rotate {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(var(--float-distance, -12px)) rotate(8deg); }
+  }
+  
+  --animate-float-2: float-2 7s ease-in-out infinite;
+  @keyframes float-2 {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    50% { transform: translateY(var(--float-distance, -18px)) rotate(-10deg) scale(1.05); }
+  }
+  
+  --animate-wiggle: wiggle 4.5s ease-in-out infinite;
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-6deg) scale(1); }
+    50% { transform: rotate(6deg) scale(1.08); }
+  }
+  
+  --animate-spin-slow: spin-slow 14s linear infinite;
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
 }
 
 @media (prefers-color-scheme: dark) {

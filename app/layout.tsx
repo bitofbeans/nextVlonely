@@ -20,11 +20,18 @@ const harmondSemiBld = localFont({
 });
 
 const elgoc = localFont({
-  src: [{
+  src: [
+    {
       path: "./fonts/Elgoc.otf",
       weight: "400",
       style: "normal"
-    }],
+    },
+    {
+      path: "./fonts/Elgoc-bold.otf",
+      weight: "700",
+      style: "normal"
+    }
+  ],
   variable: "--font-elgoc-local"
 });
 
