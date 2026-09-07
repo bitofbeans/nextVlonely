@@ -12,7 +12,7 @@ const navLinks = [
 export default function Nav() {
     const pathname = usePathname()
     return (
-        <nav className="flex flex-wrap w-full justify-evenly items-center text-center text-xl sm:text-2xl md:text-3xl font-harmond">
+        <nav className="flex flex-wrap w-full max-w-220 justify-evenly items-center text-center text-xl sm:text-2xl md:text-3xl font-harmond">
           {navLinks.map((link) => {
             const isActive = pathname == link.href;
 
