@@ -22,14 +22,14 @@ export default function Nav() {
                     >
                         home
                     </Link>
-                    <Image src='/SVG/verticalStar.svg' alt="star" width={30} height={30} />
+                    <Image className='h-auto' src='/SVG/verticalStar.svg' alt="star" width={30} height={44.36} />
                     <Link
                         href="/archive"
                         className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'archive' ? 'underline decoration-1 underline-offset-2' : ''}`}
                     >
                         archive
                     </Link>
-                    <Image src='/SVG/verticalStar.svg' alt="star" width={30} height={30} />
+                    <Image className='h-auto' src='/SVG/verticalStar.svg' alt="star" width={30} height={44.36} />
                     <Link
                         href="/artists"
                         className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'artists' ? 'underline decoration-1 underline-offset-2' : ''}`}

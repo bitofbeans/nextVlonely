@@ -33,6 +33,6 @@ export default function AnimatedSVG({ src, top = 0, left = 0, scale = 100, delay
         <Image src={src} alt="" aria-hidden
         width={120} height={120}
         className={`absolute pointer-events-none h-auto ${variantClass[variant]}`}
-        style={style} />
+        style={style} loading='eager' />
     )
 }
