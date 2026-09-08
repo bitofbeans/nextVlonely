@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import localFont from 'next/font/local'
 import Nav from "./components/NavBar";
+import Footer from "./components/Footer"
 
 const harmondSemiBld = localFont({
   src: [
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Nav />
         <main className="flex flex-col flex-1 justify-center items-center w-full">
           {children}
+          <Footer />
         </main>
       </body>
     </html>

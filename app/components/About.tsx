@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function About() {
     return (
-        <section className="my-12 flex w-full max-w-[70rem] flex-col gap-6 px-5 py-8 sm:my-15 sm:flex-row sm:gap-3 sm:p-9">
+        <section className="my-12 flex w-full max-w-280 flex-col gap-6 p-9 sm:my-15 sm:flex-row sm:gap-3">
             <div className="flex flex-row items-center justify-center gap-3 sm:flex-col sm:gap-1 sm:px-10 sm:py-2" >
                 <a className="flex size-11 items-center justify-center" href="https://www.instagram.com/vlonelyandfriends/">
                     <Image src="/SVG/instagramLogo.svg" alt="instagram" width={50} height={50} />

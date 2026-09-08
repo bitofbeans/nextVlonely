@@ -10,6 +10,12 @@
 @theme {
   /* Colors */
   --color-pink: #f92f83;
+  --color-yellow: #ffc303;
+  --color-orange: #ff7000;
+  --color-purple: #aa4fec;
+  --color-blue: #027bff;
+  --color-teal: #06e5ff;
+  --color-green: #3efd91;
 
   /* Fonts */
   --font-elgoc: var(--font-elgoc-local);
@@ -83,4 +89,11 @@ body {
   font-family: var(--font-elgoc);
   background: var(--background);
   color: var(--foreground);
+}
+
+@layer utilities {
+  .side-drop-shadows {
+    box-shadow: 
+      0px 0px 30px 30px black;
+  }
 }
