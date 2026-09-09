@@ -8,6 +8,9 @@
 }
 
 @theme {
+  /* Breakpoint */
+  --breakpoint-xs: 500px;
+
   /* Colors */
   --color-pink: #f92f83;
   --color-yellow: #ffc303;
