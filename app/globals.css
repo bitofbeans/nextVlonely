@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #0a0a0a;
   --foreground: #171717;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
@@ -19,6 +19,7 @@
   --color-blue: #027bff;
   --color-teal: #06e5ff;
   --color-green: #3efd91;
+  --color-bg-black: var(--background);
 
   /* Fonts */
   --font-elgoc: var(--font-elgoc-local);
@@ -97,6 +98,6 @@ body {
 @layer utilities {
   .side-drop-shadows {
     box-shadow: 
-      0px 0px 30px 30px black;
+      0px 0px 15px 30px var(--background);
   }
 }

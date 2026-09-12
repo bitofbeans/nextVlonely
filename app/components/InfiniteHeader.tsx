@@ -32,7 +32,7 @@ export default function InfiniteHeader({ text, repeats, direction, duration, but
             )})}
             <div className="absolute flex w-full h-full z-1 top-0 left-0 justify-center items-center">
                 {buttonText && (
-                    <div className="flex justify-center items-center w-max h-full bg-black side-drop-shadows "> 
+                    <div className="flex justify-center items-center w-max h-full bg-bg-black side-drop-shadows "> 
                         <a href={buttonLink} className={`text-3xl underline decoration-1 underline-offset-2 sm:text-5xl px-5 rounded-2xl ${buttonColor}`}>
                             {buttonText}
                         </a>

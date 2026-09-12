@@ -11,6 +11,11 @@ export async function signIn(
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   });
+  // const { error } = await auth.signUp.email({
+  //   name: "admin",
+  //   email: formData.get('email') as string,
+  //   password: formData.get('password') as string,
+  // });
 
 
   if (error) {

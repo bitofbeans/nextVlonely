@@ -2,9 +2,9 @@ import Image from "next/image"
 
 function ShowDetail({ children }: { children: React.ReactNode}) {
 	return (
-			<div className="flex items-center gap-6">
-				<span className="relative h-5 w-12 shrink-0">
-					<Image className="absolute h-12 w-8 -translate-y-1/2 top-1/2 left-1/2 rotate-270" src="/SVG/verticalStar.svg" alt="" width={37} height={15}></Image>
+			<div className="flex gap-6">
+				<span className="relative h-10 w-14 shrink-0">
+					<Image className="absolute h-14 w-10 -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 rotate-270" src="/SVG/verticalStar.svg" alt="" width={37} height={15}></Image>
 				</span>
 				<div className="text-3xl">
 					{children}
@@ -18,7 +18,7 @@ type ShowCardProps = {
 	title: string;
     venue: string;
     date: string;
-	imageUrl: string;
+	imageUrl: string | null;
     ticketUrl: string | null;
 	description?: string;
 };
@@ -33,26 +33,24 @@ export default function ShowCard({
 }: ShowCardProps) {
 	const dateObject = new Date(date);
 
-	const localDateTime = dateObject.toLocaleString(undefined, {
+	const localDateTime = dateObject.toLocaleString("en-US", {
 		month: "long",
 		day: "2-digit",
 		hour: "2-digit",
 		hour12: true,
+		timeZone: "CST"
 	});
-	/*
-		Structure:
-		Header with bg color and black caps for visual shape change
-		...
-	*/
+
+	imageUrl = imageUrl ? imageUrl : ""
 	ticketUrl = ticketUrl ? ticketUrl : ""
-	const poster = (<Image className="rounded-t-[2rem] overflow-hidden bg-pink" src={imageUrl} width={300} height={300} alt=""/>)
+	const poster = (<Image className="lg:rounded-none rounded-t-4xl overflow-hidden bg-pink" src={imageUrl} width={300} height={300} alt=""/>)
 	return (
-		<article className="flex flex-col w-[90vw] my-9">
-			<header className="relative grid w-full mx-auto max-w-[370px] xs:max-w-none lg:grid-cols-[380px_minmax(0,1fr)] bg-pink items-center z-0 lg:-z-10">
+		<article className="flex flex-col w-[90vw] lg:w-[70vw] my-9">
+			<header className="relative grid w-full mx-auto max-w-[370px] xs:max-w-none lg:grid-cols-[380px_minmax(0,1fr)] bg-pink items-center py-1 z-0 lg:-z-10">
 				<div className="pointer-events-none absolute inset-y-0 -left-px aspect-1/2">
 					<Image className="w-full object-contain" src="/SVG/headerCap.svg" alt="" width={25} height={25}/>
 				</div>
-				<h1 className="text-center text-balance sm:text-left col-start-2 xs:px-5 px-10 text-black font-bold xs:text-4xl text-3xl">
+				<h1 className="text-center text-balance xs:text-left col-start-2 xs:px-5 px-10 text-black font-bold xs:text-4xl py-1 text-3xl -mb-1">
 					{title}
 				</h1>
 				<div className="pointer-events-none absolute inset-y-0 -right-px aspect-1/2 -scale-x-100">
@@ -61,11 +59,11 @@ export default function ShowCard({
 			</header>
 			<div>
 				<div className="grid grid-cols-1 place-items-center lg:grid-cols-[380px_minmax(0,1fr)]">
-					<div className="-mt-9 lg:-mt-6 lg:px-10 shrink-0 border-pink bg-pink lg:bg-transparent border-35 lg:border-none">
-						{poster}
+					<div className="-mt-9 lg:-mt-6 lg:pl-10 shrink-0 border-pink bg-pink lg:bg-transparent border-35 lg:border-none">
+						{imageUrl != "" ? poster : ""}
 					</div>
 					<div className="flex flex-col w-full h-full">
-						<div className="flex flex-col py-5 gap-3 w-full my-auto">
+						<div className="flex flex-col p-9 gap-1 w-full mb-auto">
 							<ShowDetail>
 								{localDateTime}
 							</ShowDetail>
