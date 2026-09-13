@@ -53,7 +53,9 @@ MEDIA
 
 ## TODO: For now
 
-- [ ] Sort and clear up database for shows and artists  
+- [ ] Review EditMode.tsx
+- [ ] Review admin/page.tsx
+- [x] Sort and clear up database for shows and artists  
 
 - [ ] Archive page
   - [ ] Design layout   

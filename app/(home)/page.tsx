@@ -9,9 +9,6 @@ import HeroSVG from './HeroSVG'
 import About from './About';
 import UpcomingShows from './UpcomingShows';
 
-
-
-
 export default async function Home() {
     return (
         <div className="flex flex-col items-center max-w-full">
@@ -40,17 +37,3 @@ export default async function Home() {
         </div>
     );
 }
-
-/*
-            <div className="flex border p-5 justify-center flex-col max-w-[90vw]">
-                <div className="p-5">
-                </div>
-                <div>
-                    {upcomingShows.map((show) => {
-                        return (
-                            <ShowCard key={show.id} {...show} />
-                        )
-                    })}
-                </div>
-            </div>
-            */

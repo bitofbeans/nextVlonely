@@ -1,7 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Link from "next/link";
 import localFont from 'next/font/local'
 import Nav from "./components/NavBar";
+import { EditModeProvider } from "./components/EditModeProvider";
 
 const harmondSemiBld = localFont({
   src: [
@@ -48,7 +50,7 @@ function Footer() {
                 website by <a className="pl-1 underline decoration-1 underline-offset-2 text-blue-400" href="https://bitbeans.me">bitbeans</a>
             </div>
             <div className='w-full flex justify-end col-start-5'>
-                <a className="text-xl text-white/25 p-2" href="/admin">log-in</a>
+                <Link className="text-xl text-white/25 p-2" href="/admin">log-in</Link>
             </div>
         </div>
     )
@@ -61,11 +63,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${harmondSemiBld.variable} ${elgoc.variable} h-full antialiased`}
     >
       <body className="min-h-full min-w-full overflow-x-hidden">
-        <Nav />
-        <main className="flex flex-col flex-1 justify-center items-center w-full">
-          {children}
-          <Footer />
-        </main>
+          <Nav />
+          <main className="flex flex-col flex-1 justify-center items-center w-full">
+            <EditModeProvider>
+              {children}
+              <Footer />
+            </EditModeProvider>
+          </main>
       </body>
     </html>
   );

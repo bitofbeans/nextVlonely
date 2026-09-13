@@ -13,8 +13,7 @@ export const showsTable = pgTable(
     title: varchar({ length: 255 }).notNull(),
     description: text().notNull(),
     venue: varchar({ length: 255 }).notNull(),
-    date: timestamp({ withTimezone: true, mode: "string" }).notNull(),
-    timezone: text().notNull().default("America/Chicago"),
+    date: timestamp({ withTimezone: false, mode: "string" }).notNull(),
     ticketUrl: text("ticket_url"),
     posterMediaID: integer("poster_media_id")
       .references((): AnyPgColumn => mediaTable.id, { onDelete: "set null" }), // media deleted -> show poster null
@@ -56,7 +55,7 @@ export const showsArtistsTable = pgTable(
 export const mediaTable = pgTable("media", {
   id: serial().primaryKey(),
   objectKey: text("object_key").notNull().unique(),
-  uploadTimestamp: timestamp("upload_timestamp", { withTimezone: true })
+  uploadTimestamp: timestamp("upload_timestamp", { withTimezone: false })
     .notNull().defaultNow(),
   showID: integer("show_id")
     .references((): AnyPgColumn => showsTable.id, { onDelete: "cascade" })// show deleted --> delete media

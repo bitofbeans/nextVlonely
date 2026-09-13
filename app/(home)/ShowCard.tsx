@@ -29,17 +29,19 @@ export default function ShowCard({
 	venue,
 	description,
 	imageUrl,
-	ticketUrl
+	ticketUrl,
 }: ShowCardProps) {
-	const dateObject = new Date(date);
-
-	const localDateTime = dateObject.toLocaleString("en-US", {
+	const dateObject = new Date(date)
+	
+	const dateConfig: Intl.DateTimeFormatOptions = {
 		month: "long",
-		day: "2-digit",
-		hour: "2-digit",
-		hour12: true,
-		timeZone: "CST"
-	});
+		weekday: "long",
+		day: "numeric",
+		hour: "numeric",
+		minute: "numeric",
+	}
+
+	const localDateTime = new Intl.DateTimeFormat("en-US", dateConfig).format(dateObject)
 
 	imageUrl = imageUrl ? imageUrl : ""
 	ticketUrl = ticketUrl ? ticketUrl : ""
@@ -59,7 +61,8 @@ export default function ShowCard({
 			</header>
 			<div>
 				<div className="grid grid-cols-1 place-items-center lg:grid-cols-[380px_minmax(0,1fr)]">
-					<div className="-mt-9 lg:-mt-6 lg:pl-10 shrink-0 border-pink bg-pink lg:bg-transparent border-35 lg:border-none">
+					<div className={`-mt-9 lg:-mt-6 lg:pl-10 shrink-0 border-pink bg-pink 
+							lg:bg-transparent border-35 lg:border-none ${imageUrl != "" ? "" : "border-none"}`}>
 						{imageUrl != "" ? poster : ""}
 					</div>
 					<div className="flex flex-col w-full h-full">

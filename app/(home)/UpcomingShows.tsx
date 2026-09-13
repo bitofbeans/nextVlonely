@@ -1,8 +1,10 @@
 import { db } from "@/lib/db"
 import { mediaTable, showsTable } from "@/lib/db/schema"
-import ShowCard from "./ShowCard"
 import { getMediaUrl } from "@/lib/media"
-import { eq } from "drizzle-orm"
+import { desc, eq } from "drizzle-orm"
+import ShowCard from "./ShowCard"
+import { ShowEdit } from "./EditMode"
+
 
 
 
@@ -10,22 +12,30 @@ export default async function UpcomingShows() {
     const rows = await db
         .select({ show: showsTable, poster: mediaTable })
         .from(showsTable)
+        .orderBy(desc(showsTable.date))
         .leftJoin(mediaTable, eq(showsTable.posterMediaID, mediaTable.id))
 
     if (rows.length >= 1) {
         return (
             <div>
+                <ShowEdit />
                 {rows.map(({show, poster}) => (
-                    <ShowCard key={show.id} {...show} 
-                        imageUrl={poster ? getMediaUrl(poster.objectKey) : null}    />
+                    <div key={show.id}>
+                        <ShowCard  {...show} 
+                            imageUrl={poster ? getMediaUrl(poster.objectKey) : null}    />
+                        <ShowEdit defaultShow={show} />   
+                    </div>
                 ))}
             </div>
         )
     } else {
         return (
-            <p className="m-10 my-20 text-3xl">
-                no upcoming shows yet, stay tuned...
-            </p>
+            <div>
+                <ShowEdit />
+                <p className="m-10 my-20 text-3xl">
+                    no upcoming shows yet, stay tuned...
+                </p>
+            </div>
         )
     }
 }
