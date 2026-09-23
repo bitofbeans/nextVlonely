@@ -3,6 +3,7 @@ import {
   check, integer, pgTable, 
   varchar, text, serial, 
   timestamp, primaryKey, unique,
+  uuid,
   type AnyPgColumn
 } from "drizzle-orm/pg-core";
 
@@ -28,7 +29,7 @@ export const artistsTable = pgTable("artists", {
     .references(() => mediaTable.id),
   instagramHandle: text("instagram_handle"),
   instagramUrl: text("instagram_url"),
-  description: text().notNull(),
+  description: text(),
 });
 
 export const showsArtistsTable = pgTable(
@@ -54,7 +55,7 @@ export const showsArtistsTable = pgTable(
 
 export const mediaTable = pgTable("media", {
   id: serial().primaryKey(),
-  objectKey: text("object_key").notNull().unique(),
+  objectKey: uuid("object_key").defaultRandom().notNull(),
   uploadTimestamp: timestamp("upload_timestamp", { withTimezone: false })
     .notNull().defaultNow(),
   showID: integer("show_id")

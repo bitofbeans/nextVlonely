@@ -1,9 +1,20 @@
 'use server'
 import { auth } from '@/lib/auth/server'
 import { db } from '@/lib/db';
-import { showsTable } from '../../lib/db/schema';
+import { uploadFile, deleteFile } from '@/lib/media';
+import { showsTable, mediaTable } from '../../lib/db/schema';
 import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
+
+const convertToSlug = (text: string) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-') // replace spaces with hyphens
+    .replace(/[^\w\-]+/g, '') // remove all non-word characters
+    .replace(/\-\-+/g, '-') // replace multiple hyphens with single hyphen
+}
 
 const getString = (name: string, formData: FormData) : string => {
     const value = formData.get(name)
@@ -24,18 +35,16 @@ const getID = (formData: FormData): number | undefined => {
 }
 
 export async function postShow(formData: FormData) {
+    // Check if authenticated
     const { data: session } = await auth.getSession();
     
     if (!session?.user) {
         throw new Error("Unauthorized")
     }
 
-
-
-    const showID = getID(formData)
-
+    // Construct show object
     const show: typeof showsTable.$inferInsert = {
-        id: showID,
+        id: getID(formData),
         title: getString("title", formData),
         description: getString("description", formData),
         venue: getString("venue", formData),
@@ -43,19 +52,46 @@ export async function postShow(formData: FormData) {
         ticketUrl: getString("ticketUrl", formData),
     };
 
-    if (showID) {
-        // if already existing show,
-        await db.update(showsTable)
+    if (show.id) {
+        // if already existing show, update data
+        const [result] = await db.update(showsTable)
             .set(show)
-            .where(eq(showsTable.id, showID))
+            .where(eq(showsTable.id, show.id))
+            .returning()
+        show.posterMediaID = result.posterMediaID // save for later
     }
     else {
-        const newShow = await db.insert(showsTable)
+        // if no show, create show in db
+        const [newShow] = await db.insert(showsTable)
             .values(show)
             .returning();
+        show.id = newShow.id
     }
-    
 
+    // check if user uploaded file for poster
+    const posterFile = formData.get("poster") as File | null
+    if (posterFile instanceof File && posterFile.size > 0) {
+        if(show.posterMediaID) {
+            // show already has picture, delete cloudflare
+            deleteMediaByID(show.posterMediaID)
+
+            // and from database
+            await db.delete(mediaTable)
+                .where(eq(mediaTable.id, show.posterMediaID))
+        }
+        // add to file to db and upload, connect db
+        const [newMedia] = await db.insert(mediaTable)
+            .values({ showID: show.id })
+            .returning();
+
+        await uploadFile(posterFile, newMedia.objectKey)
+
+        await db.update(showsTable)
+            .set({ posterMediaID: newMedia.id })
+            .where(eq(showsTable.id, show.id))
+        }    
+
+    // let user see changes
     revalidatePath("/");
 }
 
@@ -68,9 +104,26 @@ export async function deleteShow(formData: FormData) {
 
     const showID = getID(formData)
     if (showID) {
+        // get show data from db
+        const [show] = await db.select()
+            .from(showsTable)
+            .where(eq(showsTable.id, showID))
+        
+        // find id of poster if exists, and delete from bucket
+        if (show.posterMediaID) {
+            deleteMediaByID(show.posterMediaID)
+        }
         await db.delete(showsTable)
             .where(eq(showsTable.id, showID))
     }
     
+    // let user see changes
     revalidatePath("/");
+}
+
+async function deleteMediaByID(id: number) {
+    const [poster] = await db.select()
+        .from(mediaTable)
+        .where(eq(mediaTable.id, id))
+    deleteFile(poster.objectKey)
 }

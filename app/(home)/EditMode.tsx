@@ -25,7 +25,7 @@ export function ShowEdit(props: Omit<ShowFormProps, "saveAction">) {
     if (!isEditMode) return null;
 
     return (
-        <Collapsible.Root className="mx-auto w-full max-w-3xl rounded-xl border border-white/20 bg-gray-900">
+        <Collapsible.Root className="mx-auto my-4 w-full max-w-3xl rounded-xl border border-white/20 bg-gray-900">
             <Collapsible.Trigger
                 className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-xl px-4 py-3 text-xl transition-colors hover:bg-gray-800 data-panel-open:text-pink focus-visible:outline-2 focus-visible:outline-pink"
             >

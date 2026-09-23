@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { ExternalIcon } from "../components/Icons";
 
 function ShowDetail({ children }: { children: React.ReactNode}) {
 	return (
@@ -45,10 +46,12 @@ export default function ShowCard({
 
 	imageUrl = imageUrl ? imageUrl : ""
 	ticketUrl = ticketUrl ? ticketUrl : ""
+	
+	const adjustForPoster = imageUrl != "" ? "lg:grid-cols-[380px_minmax(0,1fr)]" : ""
 	const poster = (<Image className="lg:rounded-none rounded-t-4xl overflow-hidden bg-pink" src={imageUrl} width={300} height={300} alt=""/>)
 	return (
 		<article className="flex flex-col w-[90vw] lg:w-[70vw] my-9">
-			<header className="relative grid w-full mx-auto max-w-[370px] xs:max-w-none lg:grid-cols-[380px_minmax(0,1fr)] bg-pink items-center py-1 z-0 lg:-z-10">
+			<header className={`relative grid w-full mx-auto max-w-[370px] xs:max-w-none ${adjustForPoster} bg-pink items-center py-1 z-0 lg:-z-10`}>
 				<div className="pointer-events-none absolute inset-y-0 -left-px aspect-1/2">
 					<Image className="w-full object-contain" src="/SVG/headerCap.svg" alt="" width={25} height={25}/>
 				</div>
@@ -60,7 +63,7 @@ export default function ShowCard({
 				</div>			
 			</header>
 			<div>
-				<div className="grid grid-cols-1 place-items-center lg:grid-cols-[380px_minmax(0,1fr)]">
+				<div className={`grid grid-cols-1 place-items-center ${adjustForPoster}`}>
 					<div className={`-mt-9 lg:-mt-6 lg:pl-10 shrink-0 border-pink bg-pink 
 							lg:bg-transparent border-35 lg:border-none ${imageUrl != "" ? "" : "border-none"}`}>
 						{imageUrl != "" ? poster : ""}
@@ -104,7 +107,10 @@ export default function ShowCard({
 									alt=""
 									className="pointer-events-none absolute inset-0 h-full w-full"
 								/>
-								<span className="relative">tickets</span>
+								<span className="relative flex items-center">
+									tickets
+									<ExternalIcon />
+								</span>
 							</a>
 						</div>
 					</div>

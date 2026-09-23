@@ -1,4 +1,5 @@
 allowBuilds:
+  aws-sdk: false
   core-js: false
   esbuild: true
   sharp: false

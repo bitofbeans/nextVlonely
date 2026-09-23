@@ -14,7 +14,7 @@ export default async function Home() {
         <section className="mt-9 w-full max-w-lg rounded-2xl border border-white/15 bg-white/[0.03] p-6 sm:p-8">
           <p className="mb-3 text-sm font-bold uppercase tracking-widest text-pink">Admin</p>
           <h1 className="text-3xl leading-tight sm:text-4xl">
-            Hello, <span className="font-bold break-words">{session.user.name}</span>
+            Hello, <span className="font-bold wrap-break-word">{session.user.name}</span>
           </h1>
           <p className="mt-3 text-lg leading-relaxed text-white/60">
             Turn on edit mode, then head to the page you want to update.

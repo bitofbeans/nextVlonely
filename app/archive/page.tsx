@@ -9,7 +9,7 @@ export default function Archive() {
 
             <p></p>
 
-            <InfiniteHeader text="past shows " repeats={3} direction="right" duration={19} />
+            <InfiniteHeader text="past shows " repeats={1} direction="right" duration={19} />
 
             <InfiniteHeader text="upcoming shows " repeats={2} direction="right" duration={59} buttonLink="/" buttonText="looking for new shows?" />
         </div>

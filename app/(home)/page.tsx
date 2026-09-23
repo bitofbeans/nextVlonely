@@ -23,10 +23,10 @@ export default async function Home() {
                 <HeroSVG src="/SVG/friendsText.svg" top={77.5} left={54.2} scale={35} variant="float" duration={5.8} delay={-4.2} distance={12} />
             </Hero>
             
-            <InfiniteHeader text="about" repeats={3} direction="left" duration={20} />
+            <InfiniteHeader text="about" repeats={1} direction="left" duration={20} />
             <About />
 
-            <InfiniteHeader text="upcoming shows" repeats={3} direction="right" duration={39} />
+            <InfiniteHeader text="upcoming shows" repeats={1} direction="right" duration={39} />
 
             <UpcomingShows />
 

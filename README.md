@@ -56,6 +56,9 @@ MEDIA
 - [ ] Review EditMode.tsx
 - [ ] Review admin/page.tsx
 - [x] Sort and clear up database for shows and artists  
+- [ ] Add "add artist" capabilities
+- [ ] Color artists names/add links
+- [ ] Info modal on button click
 
 - [ ] Archive page
   - [ ] Design layout   
@@ -65,21 +68,15 @@ MEDIA
   - [ ] Maybe this can be left as "coming soon"
   - [ ] Design layout   
   - [ ] Make template page for each show
-- [ ] Finish admin form UI
 - [ ] Backend database server functions
-  - [ ] Add show
-  - [ ] Edit existing show
+  - [x] Add show
+  - [x] Edit existing show
   - [ ] Add photos to show
-    - [ ] Upload image panel for cloudflare 
+    - [x] Upload image panel for cloudflare 
   - [ ] Add artist server function
-- [ ] Finish home page
-    - [ ] Color artists names/add links
-    - [ ] Info modal on button click
-    - [ ] Make my name smaller
-    - [ ] Tickets outside link indicator
-    - [ ] Add more hearts and stars around page stylistically
-    - [ ] Final polish on style
-- [ ] Implement neon/vercel caching
+- [ ] Add more hearts and stars around page stylistically
+- [ ] FINAL Polish on style
+- [ ] FINAL Implement neon/vercel caching
 
 
 ## Before launching to a new domain name
