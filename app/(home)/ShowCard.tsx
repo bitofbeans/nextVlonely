@@ -1,13 +1,14 @@
 import Image from "next/image"
 import { ExternalIcon } from "../components/Icons";
+import Link from "next/link";
 
 function ShowDetail({ children }: { children: React.ReactNode}) {
 	return (
 			<div className="flex gap-6">
-				<span className="relative h-10 w-14 shrink-0">
-					<Image className="absolute h-14 w-10 -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 rotate-270" src="/SVG/verticalStar.svg" alt="" width={37} height={15}></Image>
+				<span className="relative h-8 w-13 xs:w-14 shrink-0">
+					<Image className="absolute h-10 w-13 xs:h-14 xs:w-10 -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 rotate-270" src="/SVG/verticalStar.svg" alt="" width={37} height={15}></Image>
 				</span>
-				<div className="text-3xl">
+				<div className="text-2xl xs:text-3xl">
 					{children}
 				</div>
 			</div>
@@ -96,7 +97,7 @@ export default function ShowCard({
 								<span className="relative">info</span>
 							</button>
 							<Image className="mx-5" src={"SVG/circle.svg"} alt="" width={43} height={43}/>
-							<a
+							<Link
 								href={ticketUrl}
 								className="relative inline-flex h-11 w-36 shrink-0
 											items-center justify-center text-2xl text-white
@@ -107,11 +108,12 @@ export default function ShowCard({
 									alt=""
 									className="pointer-events-none absolute inset-0 h-full w-full"
 								/>
-								<span className="relative flex items-center">
+								<span className={`relative flex items-center ${ticketUrl == "" ? "line-through" : ""}`}>
 									tickets
-									<ExternalIcon />
+									{ticketUrl != "" ? <ExternalIcon /> : ""}
+
 								</span>
-							</a>
+							</Link>
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,6 @@
 "use client";
 
+import CreatableSelect from "react-select/creatable"
 import { useId } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
@@ -54,45 +55,40 @@ export function ShowForm({ defaultShow, posterUrl, saveAction }: ShowFormProps) 
         >
             {defaultShow && <input type="hidden" name="id" value={defaultShow.id} />}
 
-            <label className={labelClassName}>
-                Show title
-                <input name="title" required maxLength={255} defaultValue={defaultShow?.title ?? ""}
-                    placeholder="e.g. Vlonely & Friends" className={inputClassName} />
-            </label>
+            <div className="flex flex-col p-3 border-1 rounded-2xl">
+                <label className={labelClassName}>
+                    Show title
+                    <input name="title" required maxLength={255} defaultValue={defaultShow?.title ?? ""}
+                        placeholder="e.g. Vlonely & Friends" className={inputClassName} />
+                </label>
 
-            <label className={labelClassName}>
-                Description
-                <textarea name="description" required rows={4} defaultValue={defaultShow?.description ?? ""}
-                    placeholder="Tell people about the lineup and what to expect."
-                    className={`${inputClassName} min-h-28 resize-y`} />
-            </label>
+                <label className={labelClassName}>
+                    Description
+                    <textarea name="description" required rows={4} defaultValue={defaultShow?.description ?? ""}
+                        placeholder="Tell people about the lineup and what to expect."
+                        className={`${inputClassName} min-h-28 resize-y`} />
+                </label>
 
-            <label className={labelClassName}>
-                Venue
-                <input name="venue" required maxLength={255} defaultValue={defaultShow?.venue ?? ""}
-                    placeholder="Venue name and city" className={inputClassName} />
-            </label>
+                <label className={labelClassName}>
+                    Venue
+                    <input name="venue" required maxLength={255} defaultValue={defaultShow?.venue ?? ""}
+                        placeholder="Venue name and city" className={inputClassName} />
+                </label>
+            </div>
+            <div className="flex flex-col p-3 border rounded-2xl">
+                <label className={labelClassName}>
+                    Artist(s)
+                    <input name="artists" required maxLength={255} defaultValue={defaultShow?.venue ?? ""}
+                        placeholder="Venue name and city" className={inputClassName} />
 
+                </label>
+            </div>
             <div className="grid gap-5 sm:grid-cols-2">
                 <label className={labelClassName}>
                     Date and time
                     <input type="datetime-local" name="date" required defaultValue={defaultShow?.date}
                         aria-describedby={`${id}-date-help`} className={`${inputClassName} min-w-0 scheme-dark`} />
                 </label>
-                {/* <label className={labelClassName}>
-
-                    Time zone
-                    <select name="timezone" required
-                        defaultValue={defaultShow?.timezone ?? "America/Chicago"}
-                        className={`${inputClassName} scheme-dark`} aria-describedby={`${id}-date-help`}>
-                        <option value="America/New_York">Eastern — New York</option>
-                        <option value="America/Chicago">Central — Chicago</option>
-                        <option value="America/Denver">Mountain — Denver</option>
-                        <option value="America/Los_Angeles">Pacific — Los Angeles</option>
-                        <option value="America/Phoenix">Arizona — Phoenix</option>
-                        <option value="Pacific/Honolulu">Hawaii — Honolulu</option>
-                    </select>
-                </label> */}
             </div>
             <p id={`${id}-date-help`} className="-mt-3 text-sm text-white/50">
                 Enter the local time at the venue.
@@ -153,5 +149,14 @@ function DeleteButton() {
                 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">
                     {pending && action === deleteShow ? "Deleting..." : "Delete"}
         </button>
+    )
+}
+
+function ArtistsSelect() {
+    return (
+        <CreatableSelect
+            isClearable
+            isMulti
+        />
     )
 }
