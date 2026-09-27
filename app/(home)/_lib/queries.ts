@@ -3,7 +3,7 @@ import { artistsTable, mediaTable, showsArtistsTable, showsTable } from "@/lib/d
 import { eq, desc, asc } from "drizzle-orm"
 
 type ShowWithArtists = {
-    show: (typeof showsTable.$inferSelect) | null
+    show: (typeof showsTable.$inferSelect)
     poster: (typeof mediaTable.$inferSelect) | null,
     artists: NonNullable<(typeof artistsTable.$inferSelect)>[],
 }
