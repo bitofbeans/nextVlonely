@@ -102,7 +102,7 @@ export default function ShowCard({
 								{venue}
 							</ShowDetail>
 							<ShowDetail>
-								<p className="text-pink">
+								<div className="text-pink">
 									{artists.map((artist, index) => {
 										const textColor = colors[index % colors.length]
 										if (artist) return (
@@ -117,7 +117,7 @@ export default function ShowCard({
 										)
 										else return <div key={index}></div>
 									})}
-								</p>
+								</div>
 							</ShowDetail>
 						</div>
 						<div className="flex flex-row justify-center items-center mt-auto">
