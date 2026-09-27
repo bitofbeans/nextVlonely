@@ -1,6 +1,10 @@
+'use client'
 import Image from "next/image"
-import { ExternalIcon } from "../components/Icons";
 import Link from "next/link";
+import { ExternalIcon } from "../components/Icons";
+import { artistsTable } from "@/lib/db/schema";
+import { Modal } from "./ShowDescModal";
+import { useState } from "react";
 
 function ShowDetail({ children }: { children: React.ReactNode}) {
 	return (
@@ -23,16 +27,21 @@ type ShowCardProps = {
 	imageUrl: string | null;
     ticketUrl: string | null;
 	description?: string;
+	artists: (typeof artistsTable.$inferInsert| null)[]
 };
 
 export default function ShowCard({
+	id,
     title,
 	date,
 	venue,
 	description,
 	imageUrl,
 	ticketUrl,
+	artists
 }: ShowCardProps) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
 	const dateObject = new Date(date)
 	
 	const dateConfig: Intl.DateTimeFormatOptions = {
@@ -48,10 +57,25 @@ export default function ShowCard({
 	imageUrl = imageUrl ? imageUrl : ""
 	ticketUrl = ticketUrl ? ticketUrl : ""
 	
+	const colors = [
+		"pink",
+		"yellow",
+		"orange",
+		"purple",
+		"blue",
+		"teal",
+		"green"
+	]
+
+
 	const adjustForPoster = imageUrl != "" ? "lg:grid-cols-[380px_minmax(0,1fr)]" : ""
 	const poster = (<Image className="lg:rounded-none rounded-t-4xl overflow-hidden bg-pink" src={imageUrl} width={300} height={300} alt=""/>)
 	return (
 		<article className="flex flex-col w-[90vw] lg:w-[70vw] my-9">
+			<Modal isOpen={isModalOpen}>
+				<h2>{title}</h2>
+				<p>{description}</p>
+			</Modal>
 			<header className={`relative grid w-full mx-auto max-w-[370px] xs:max-w-none ${adjustForPoster} bg-pink items-center py-1 z-0 lg:-z-10`}>
 				<div className="pointer-events-none absolute inset-y-0 -left-px aspect-1/2">
 					<Image className="w-full object-contain" src="/SVG/headerCap.svg" alt="" width={25} height={25}/>
@@ -79,12 +103,26 @@ export default function ShowCard({
 							</ShowDetail>
 							<ShowDetail>
 								<p className="text-pink">
-									{"nardi, bandtana, patex, vlonely, stylxst, keily rude, glozaee"}
+									{artists.map((artist, index) => {
+										const textColor = colors[index % colors.length]
+										if (artist) return (
+											<div key={index} className="inline-block">
+												<Link href={"/artists/" + artist.slug} className={`cursor-pointer whitespace-pre text-${textColor}`}>
+													{artist.name}
+													{index != artists.length - 1 ? ", " : ""}
+												</Link>
+												
+											</div>
+										
+										)
+										else return <div key={index}></div>
+									})}
 								</p>
 							</ShowDetail>
 						</div>
 						<div className="flex flex-row justify-center items-center mt-auto">
 							<button
+								onClick={() => setIsModalOpen(true)}
 								className="relative inline-flex h-11 w-36 shrink-0
 											items-center justify-center text-2xl text-white
 											focus-visible:outline-2 focus-visible:outline-offset-4"

@@ -1,10 +1,7 @@
 import { sql } from "drizzle-orm";
 import { 
-  check, integer, pgTable, 
-  varchar, text, serial, 
-  timestamp, primaryKey, unique,
-  uuid,
-  type AnyPgColumn
+  check, integer, pgTable, varchar, text, serial, 
+  timestamp, primaryKey, unique,uuid, type AnyPgColumn
 } from "drizzle-orm/pg-core";
 
 export const showsTable = pgTable(
@@ -35,9 +32,8 @@ export const artistsTable = pgTable("artists", {
 export const showsArtistsTable = pgTable(
   "shows_artists", 
   {
-    showID: integer("show_id")
-      .notNull()
-      .references(() => showsTable.id, { onDelete: "cascade"}), // foreign constraint --> show must exist in shows table 
+    showID: integer("show_id").notNull()
+      .references(() => showsTable.id, { onDelete: "cascade"}), // show delete -> those show cols in this table deleted
     artistID: integer("artist_id")
       .notNull()
       .references(() => artistsTable.id),

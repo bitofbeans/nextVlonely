@@ -75,8 +75,11 @@ MEDIA
     - [x] Upload image panel for cloudflare 
   - [ ] Add artist server function
 - [ ] Add more hearts and stars around page stylistically
+- [ ] FINAL Update Cloudflare URL (next.config.ts, .env)
 - [ ] FINAL Polish on style
 - [ ] FINAL Implement neon/vercel caching
+- [ ] FINAL Get domain, edit metadata in layout.tsx
+- [ ] FINAL Search engine optimization
 
 
 ## Before launching to a new domain name

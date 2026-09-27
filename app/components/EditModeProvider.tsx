@@ -1,7 +1,8 @@
 "use client"
-
 import { createContext, type Dispatch, SetStateAction, useContext, useState } from "react"
 
+// purpose: prop drill edit mode to all children
+// make context w/createContext, pass state+setter through provider, get context w/useContext
 
 type EditModeContextType = {
     isEditMode: boolean,

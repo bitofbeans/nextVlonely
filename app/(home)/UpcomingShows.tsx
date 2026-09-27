@@ -1,41 +1,35 @@
-import { db } from "@/lib/db"
-import { mediaTable, showsTable } from "@/lib/db/schema"
 import { getMediaUrl } from "@/lib/media"
-import { desc, eq } from "drizzle-orm"
 import ShowCard from "./ShowCard"
-import { ShowEdit } from "./EditMode"
-
-
-
+import { ShowEdit } from "./ShowEdit"
+import { ArtistOptionProvider } from "./ArtistOptionsProvider"
+import { queryArtistOptions, queryUpcomingShows } from "./_lib/queries"
 
 export default async function UpcomingShows() {
-    const rows = await db
-        .select({ show: showsTable, poster: mediaTable })
-        .from(showsTable)
-        .orderBy(desc(showsTable.date))
-        .leftJoin(mediaTable, eq(showsTable.posterMediaID, mediaTable.id))
+    const shows = await queryUpcomingShows()
+    const artistOptions = await queryArtistOptions() // initial artist options for context 
 
-    if (rows.length >= 1) {
+    if (shows.length >= 1) {
         return (
-            <div>
+            <ArtistOptionProvider artistOptions={artistOptions}>
                 <ShowEdit />
-                {rows.map(({show, poster}) => (
+                {shows.map(({show, poster, artists}) => (
                     <div key={show.id}>
-                        <ShowCard  {...show} 
+                        <ShowCard  {...show} artists={artists}
+                        
                             imageUrl={poster ? getMediaUrl(poster.objectKey) : null}    />
-                        <ShowEdit defaultShow={show} />   
+                        <ShowEdit defaultShow={show} defaultArtists={artists}/>   
                     </div>
                 ))}
-            </div>
+            </ArtistOptionProvider>
         )
     } else {
         return (
-            <div>
+            <ArtistOptionProvider artistOptions={artistOptions}>
                 <ShowEdit />
                 <p className="m-10 my-20 text-3xl">
                     no upcoming shows yet, stay tuned...
                 </p>
-            </div>
+            </ArtistOptionProvider>
         )
     }
 }

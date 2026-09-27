@@ -3,13 +3,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 
-
-// const navLinks = [
-//   { name: 'home', href: "/" },
-//   { name: 'archive', href: "/archive" },
-//   { name: 'artists', href: "/artists" }
-// ];
-
 export default function Nav() {
     const pathname = usePathname()
     return (
@@ -18,21 +11,21 @@ export default function Nav() {
 
                     <Link
                         href="/"
-                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'home' ? 'underline decoration-1 underline-offset-2' : ''}`}
+                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == '/' ? 'underline decoration-1 underline-offset-2' : ''}`}
                     >
                         home
                     </Link>
                     <Image className='h-auto' src='/SVG/verticalStar.svg' alt="star" width={30} height={44.36} />
                     <Link
                         href="/archive"
-                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'archive' ? 'underline decoration-1 underline-offset-2' : ''}`}
+                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == '/archive' ? 'underline decoration-1 underline-offset-2' : ''}`}
                     >
                         archive
                     </Link>
                     <Image className='h-auto' src='/SVG/verticalStar.svg' alt="star" width={30} height={44.36} />
                     <Link
                         href="/artists"
-                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == 'artists' ? 'underline decoration-1 underline-offset-2' : ''}`}
+                        className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == '/artists' ? 'underline decoration-1 underline-offset-2' : ''}`}
                     >
                         artists
                     </Link>

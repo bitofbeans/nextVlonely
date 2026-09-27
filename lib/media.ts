@@ -1,6 +1,7 @@
 import { S3Client, DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+// interact with with sdk
 const S3 = new S3Client({
     region: "auto",
     endpoint: `https://${process.env.R2_ACCOUNT_ID!}.r2.cloudflarestorage.com`,
@@ -10,6 +11,10 @@ const S3 = new S3Client({
     }
 })
 
+/** 
+ * Uploads a file to Cloudflare R2 bucket using a signed URL
+ * This avoids vercel bandwith coming from sending the file through the server itself
+ */
 export async function uploadFile(file: File, key: string) {
     const uploadUrl = await getSignedUrl(
         S3,
@@ -33,8 +38,12 @@ export async function uploadFile(file: File, key: string) {
         throw new Error("Upload failed")
     }
 
+    return response
 }
 
+/** 
+ * Deletes a file from the Cloudflare R2 bucket by its key
+ */
 export async function deleteFile(key: string) {
 
     const command = new DeleteObjectCommand({
@@ -43,8 +52,13 @@ export async function deleteFile(key: string) {
     })
 
     const response = await S3.send(command)
+
+    return response
 }
 
+/** 
+ * Returns the key to access a file from the Cloudflare R2 bucket based on its key
+ */
 export function getMediaUrl(objectKey: string) {
     return `${process.env.R2_PUBLIC_BASE_URL!}/${objectKey}`;
 }

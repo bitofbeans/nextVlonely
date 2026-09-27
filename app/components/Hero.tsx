@@ -1,4 +1,3 @@
-import HeroSVG from '../(home)/HeroSVG'
 import Image from 'next/image';
 
 const heroWidths = {

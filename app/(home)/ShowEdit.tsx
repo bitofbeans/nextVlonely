@@ -1,25 +1,69 @@
 "use client";
 
 import CreatableSelect from "react-select/creatable"
-import { useId } from "react";
+import { useContext, useId, useState } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
 import { Collapsible } from "@base-ui/react";
+import imageCompression from "browser-image-compression"
 import type { showsTable } from "@/lib/db/schema";
+import { artistsTable } from "@/lib/db/schema";
 import { useEditMode } from "../components/EditModeProvider";
 import { CaretRightIcon } from "../components/Icons";
-import { postShow, deleteShow } from "./showActions";
+import { postShow, deleteShow } from "./_lib/actions";
+import { useArtistOptions } from "./ArtistOptionsProvider";
+import { MultiValue } from "react-select";
+
+interface ArtistOption {
+    readonly label: string,
+    readonly value: string
+}
 
 type Show = typeof showsTable.$inferSelect;
+type Artist = typeof artistsTable.$inferSelect
+/**
+ * Converts DB Artist data to
+ */
+const mapArtistDataToOptions = (artistData: Artist[] | undefined): ArtistOption[] => {
+    if (artistData != undefined) {
+        return artistData.map((artist) => {
+            return {
+                label: artist.name,
+                value: String(artist.id)
+            }
+        })
+    } else return []
+}
 
 type ShowFormProps = {
     defaultShow?: Show;
     posterUrl?: string | null;
     saveAction: ((formData: FormData) => Promise<void>)
+    defaultArtists?: Artist[]
 };
 
+async function compressAndPostShow(formData: FormData) {
+    const poster = formData.get("poster") as File | undefined
+
+    if (poster != undefined && poster.size > 1) {
+        const compressed = await imageCompression(poster, {
+            maxWidthOrHeight: 1600,
+            fileType: "image/webp"
+        })
+        if (compressed.size > 850000) {
+            throw new Error("Image is too large")
+        }
+        formData.set(
+            "poster",
+            compressed,
+            poster.name.replace(/\.[^.]+$/, "") + ".webp" // changes filetype to webp
+        )
+    }
+    await postShow(formData)
+}
+
 const inputClassName = "w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2.5 text-base text-white placeholder:text-white/35 transition-colors hover:border-white/40 focus:border-pink focus:outline-2 focus:outline-pink/30";
-const labelClassName = "flex flex-col gap-2 text-base text-white/80";
+const labelClassName = "flex flex-col my-1 gap-1 text-base text-white/80";
 
 export function ShowEdit(props: Omit<ShowFormProps, "saveAction">) {
     const { isEditMode } = useEditMode();
@@ -35,17 +79,17 @@ export function ShowEdit(props: Omit<ShowFormProps, "saveAction">) {
             </Collapsible.Trigger>
             <Collapsible.Panel
                 keepMounted
-                className="h-[var(--collapsible-panel-height)] overflow-hidden transition-[height] duration-200 ease-out data-starting-style:h-0 data-ending-style:h-0 motion-reduce:transition-none"
+                className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-starting-style:h-0 data-ending-style:h-0 motion-reduce:transition-none"
             >
                 <div className="border-t border-white/10 p-4 sm:p-6">
-                    <ShowForm key={props.defaultShow?.id ?? "new"} {...props} saveAction={postShow} />
+                    <ShowEditForm key={props.defaultShow?.id ?? "new"} {...props} saveAction={compressAndPostShow} defaultArtists={props.defaultArtists} />
                 </div>
             </Collapsible.Panel>
         </Collapsible.Root>
     );
 }
 
-export function ShowForm({ defaultShow, posterUrl, saveAction }: ShowFormProps) {
+export function ShowEditForm({ defaultShow, posterUrl, defaultArtists, saveAction }: ShowFormProps) {
     const id = useId();
 
     return (
@@ -55,7 +99,7 @@ export function ShowForm({ defaultShow, posterUrl, saveAction }: ShowFormProps) 
         >
             {defaultShow && <input type="hidden" name="id" value={defaultShow.id} />}
 
-            <div className="flex flex-col p-3 border-1 rounded-2xl">
+            <div className="flex flex-col p-3 border border-[#404653] rounded-2xl">
                 <label className={labelClassName}>
                     Show title
                     <input name="title" required maxLength={255} defaultValue={defaultShow?.title ?? ""}
@@ -75,22 +119,20 @@ export function ShowForm({ defaultShow, posterUrl, saveAction }: ShowFormProps) 
                         placeholder="Venue name and city" className={inputClassName} />
                 </label>
             </div>
-            <div className="flex flex-col p-3 border rounded-2xl">
+            <div className="flex flex-col p-3 border border-[#404653] rounded-2xl">
                 <label className={labelClassName}>
                     Artist(s)
-                    <input name="artists" required maxLength={255} defaultValue={defaultShow?.venue ?? ""}
-                        placeholder="Venue name and city" className={inputClassName} />
-
+                    <ArtistsSelect defaultArtists={defaultArtists}  />
                 </label>
             </div>
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-1">
                 <label className={labelClassName}>
                     Date and time
                     <input type="datetime-local" name="date" required defaultValue={defaultShow?.date}
                         aria-describedby={`${id}-date-help`} className={`${inputClassName} min-w-0 scheme-dark`} />
                 </label>
             </div>
-            <p id={`${id}-date-help`} className="-mt-3 text-sm text-white/50">
+            <p id={`${id}-date-help`} className="-mt-4 text-sm text-white/50">
                 Enter the local time at the venue.
             </p>
 
@@ -152,11 +194,80 @@ function DeleteButton() {
     )
 }
 
-function ArtistsSelect() {
+function ArtistsSelect({ defaultArtists }: { defaultArtists: ShowFormProps["defaultArtists"]}) {
+    const [isLoading, setIsLoading] = useState(false)
+    const {artists, createArtistInOptions} = useArtistOptions()
+    const [selectedOptions, setSelectedOptions] = useState<MultiValue<ArtistOption> | null>(mapArtistDataToOptions(defaultArtists))
+
+    const artistOptions = mapArtistDataToOptions(artists)
+
+    const handleCreate = async (inputValue: string) => {
+        setIsLoading(true)
+        await createArtistInOptions(inputValue)
+        setIsLoading(false)
+    }
+
+    const artistIDs: string[] = selectedOptions ? selectedOptions.map((artist) => artist.value) : []
     return (
-        <CreatableSelect
-            isClearable
-            isMulti
-        />
+        <div>
+            <CreatableSelect
+                isClearable
+                isMulti
+                isDisabled={isLoading}
+                isLoading={isLoading}
+                onChange={(newValue) => setSelectedOptions(newValue)}
+                onCreateOption={handleCreate}
+                options={artistOptions}
+                value={selectedOptions}
+                styles={{
+                    control: (base, { isFocused }) => ({
+                        ...base,
+                        backgroundColor: "rgba(0, 0, 0, 0.3)",
+                        borderColor: isFocused ? "#f92f83" : "rgba(255,255,255,0.2)",
+                        borderRadius: 8,
+                        boxShadow: isFocused ? "0 0 0 2px #f92f8340" : "none",
+                        padding: 4,
+                        "&:hover": {
+                        borderColor: isFocused ? "#f92f83" : "rgba(255,255,255,0.4)",
+                        },
+                    }),
+
+                    input: (base) => ({ ...base, color: "white" }),
+                    placeholder: (base) => ({ ...base, color: "#ffffff60" }),
+
+                    menu: (base) => ({
+                        ...base,
+                        backgroundColor: "#101222",
+                        borderRadius: 8,
+                    }),
+
+                    option: (base, { isFocused, isSelected }) => ({
+                        ...base,
+                        backgroundColor: isSelected
+                        ? "#f92f83"
+                        : isFocused ? "#192130" : "transparent",
+                        color: "white",
+                        "&:active": { backgroundColor: "#f92f8340" },
+                    }),
+
+                    // Selected artist tags
+                    multiValue: (base) => ({
+                        ...base,
+                        backgroundColor: "#f92f8326",
+                        borderRadius: 6,
+                    }),
+                    multiValueLabel: (base) => ({
+                        ...base,
+                        color: "white",
+                    }),
+                    multiValueRemove: (base) => ({
+                        ...base,
+                        color: "#f92f83",
+                    }),
+                }}
+            />
+            <input name="artists" type="hidden" defaultValue={artistIDs}/>
+
+        </div>
     )
 }
