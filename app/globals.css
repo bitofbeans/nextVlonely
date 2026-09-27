@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #ededed;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
@@ -82,13 +82,6 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   font-family: var(--font-elgoc);
   background: var(--background);
@@ -100,4 +93,13 @@ body {
     box-shadow: 
       0px 0px 15px 30px var(--background);
   }
+}
+
+html:has(dialog:modal) {
+  overflow: hidden;
+}
+
+/* Prevent layout shifts when the scrollbar disappears */
+html {
+  scrollbar-gutter: stable;
 }

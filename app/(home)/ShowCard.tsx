@@ -72,9 +72,10 @@ export default function ShowCard({
 	const poster = (<Image className="lg:rounded-none rounded-t-4xl overflow-hidden bg-pink" src={imageUrl} width={300} height={300} alt=""/>)
 	return (
 		<article className="flex flex-col w-[90vw] lg:w-[70vw] my-9">
-			<Modal isOpen={isModalOpen}>
-				<h2>{title}</h2>
-				<p>{description}</p>
+			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}
+				title={title}
+				>
+				{description}
 			</Modal>
 			<header className={`relative grid w-full mx-auto max-w-[370px] xs:max-w-none ${adjustForPoster} bg-pink items-center py-1 z-0 lg:-z-10`}>
 				<div className="pointer-events-none absolute inset-y-0 -left-px aspect-1/2">
