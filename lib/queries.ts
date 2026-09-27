@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { artistsTable, mediaTable, showsArtistsTable, showsTable } from "@/lib/db/schema"
-import { eq, desc, asc } from "drizzle-orm"
+import { eq, desc, asc, lt, gt } from "drizzle-orm"
 
 type ShowWithArtists = {
     show: (typeof showsTable.$inferSelect)
@@ -15,12 +15,20 @@ type ShowWithArtists = {
  * 
  */
 
-export async function queryUpcomingShows() {
+export async function queryShows(type: "old" | "new" | "all") {
+
+    const dateNow = new Date().toISOString()
+
+    const filter =
+        type == "old" ? lt(showsTable.date, dateNow) :
+        type == "new" ? gt(showsTable.date, dateNow) :
+        undefined
 
     // rows has multiple objects for one show and multiple artists
     const rows = await db
         .select({ show: showsTable, poster: mediaTable, artist: artistsTable})
         .from(showsTable)
+        .where(filter)
         .leftJoin(mediaTable, eq(showsTable.posterMediaID, mediaTable.id))
         .leftJoin(showsArtistsTable, eq(showsTable.id, showsArtistsTable.showID))
         .leftJoin(artistsTable, eq(showsArtistsTable.artistID, artistsTable.id))

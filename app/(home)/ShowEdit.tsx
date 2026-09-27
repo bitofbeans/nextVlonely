@@ -133,7 +133,7 @@ export function ShowEditForm({ defaultShow, posterUrl, defaultArtists, saveActio
                 </label>
             </div>
             <p id={`${id}-date-help`} className="-mt-4 text-sm text-white/50">
-                Enter the local time at the venue.
+                Enter the local time at the venue. NOTE: Shows before today's date are moved to 'archive'
             </p>
 
             <label className={labelClassName}>

@@ -103,6 +103,7 @@ export default function ShowCard({
 								{venue}
 							</ShowDetail>
 							<ShowDetail>
+								artists:
 								<div className="text-pink">
 									{artists.map((artist, index) => {
 										const textColor = colors[index % colors.length]
@@ -110,7 +111,7 @@ export default function ShowCard({
 											<div key={index} className="inline-block">
 												<Link href={"/artists/" + artist.slug} className={`cursor-pointer whitespace-pre text-${textColor}`}>
 													{artist.name}
-													{index != artists.length - 1 ? ", " : ""}
+													<p className="text-white inline-block">{index != artists.length - 1 ? " / " : ""}</p>
 												</Link>
 												
 											</div>
@@ -124,7 +125,7 @@ export default function ShowCard({
 						<div className="flex flex-row justify-center items-center mt-auto">
 							<button
 								onClick={() => setIsModalOpen(true)}
-								className="relative inline-flex h-11 w-36 shrink-0
+								className="relative inline-flex h-11 w-36 shrink-0 cursor-pointer
 											items-center justify-center text-2xl text-white
 											focus-visible:outline-2 focus-visible:outline-offset-4"
 								>

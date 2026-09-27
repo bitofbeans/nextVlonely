@@ -12,7 +12,7 @@ export default async function Artists() {
             <Hero size={"narrow"} source="/SVG/artistsHero.svg"></Hero>
             <InfiniteHeader text="showcase " repeats={1} direction="left" duration={20} />
             {artists.map((artist) => (
-                <div>
+                <div key={artist.id}>
                     {artist.name}
                 </div>
             ))}

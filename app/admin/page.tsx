@@ -16,7 +16,7 @@ export default async function Home() {
     return (
       <div className="flex min-h-[90svh] my-auto w-full items-center justify-center px-5 py-16 text-white">
         <section className="mt-9 w-full max-w-lg rounded-2xl border border-white/15 bg-white/3 p-6 sm:p-8">
-          <p className="mb-3 text-sm font-bold uppercase tracking-widest text-pink">Admin</p>
+          <p className="mb-3 text-sm font-harmond uppercase tracking-widest text-pink">Admin</p>
           <h1 className="text-3xl leading-tight sm:text-4xl">
             Hello, <span className="font-bold wrap-break-word">{session.user.name}</span>
           </h1>
@@ -47,7 +47,7 @@ export default async function Home() {
   return (
     <div className="flex min-h-[75svh] w-full items-center justify-center px-5 py-16 text-white">
       <section className="w-full max-w-lg rounded-2xl border border-white/15 bg-white/3 p-6 sm:p-8">
-        <p className="mb-3 text-sm font-bold uppercase text-pink">Admin</p>
+        <p className="mb-3 text-sm font-harmond font-bold uppercase text-pink">Admin</p>
         <h1 className="text-3xl font-bold sm:text-4xl">Sign in to edit</h1>
         <p className="mt-3 text-lg text-white/60">Manage your shows and artists.</p>
         <Link

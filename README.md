@@ -8,19 +8,21 @@
 The artist needs to be able to add shows to past shows, add photos for that show's gallery, update their about me, add artists to the artists page.
 
 ### Admin/CMS panel:
-Login page
-Dashboard to add/edit/delete shows, upload photos to a show
-Add/edit/delete artists
-Edit the about/bio text.. ? maybe
+Turn on edit mode,
+Go to each page to edit
+- home: add/edit/delete upcoming shows
+- archive: add/edit/delete past shows, upload gallery images to show
+- artists: add/edit/delete artists
 
+maybe: edit about text
 
-## Planned Stack:
+## Stack:
 - Next.js + TS + Tailwind,
 - Neon PostgreSQL (Database + Auth)
 - Drizzle ORM 
 - Cloudflare R2 (10mil reads a month free and free 10gb),
 - Vercel Hosting  
-- Maybe: Zod, Markdown for rich text
+<!-- - Maybe: Zod, Markdown for rich text -->
 
 ## DB Schema
 
