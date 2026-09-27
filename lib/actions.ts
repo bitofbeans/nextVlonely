@@ -2,7 +2,7 @@
 import { auth } from '@/lib/auth/server'
 import { db } from '@/lib/db';
 import { uploadFile, deleteFile } from '@/lib/media';
-import { showsTable, mediaTable, artistsTable, showsArtistsTable } from '../../../lib/db/schema';
+import { showsTable, mediaTable, artistsTable, showsArtistsTable } from '@/lib/db/schema'
 import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
 

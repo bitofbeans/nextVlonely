@@ -10,7 +10,7 @@ import type { showsTable } from "@/lib/db/schema";
 import { artistsTable } from "@/lib/db/schema";
 import { useEditMode } from "../components/EditModeProvider";
 import { CaretRightIcon } from "../components/Icons";
-import { postShow, deleteShow } from "./_lib/actions";
+import { postShow, deleteShow } from "@/lib/actions";
 import { useArtistOptions } from "./ArtistOptionsProvider";
 import { MultiValue } from "react-select";
 

@@ -1,6 +1,6 @@
 "use client"
 import { createContext, useContext, useState } from "react"
-import { addArtistToDB } from "./_lib/actions" 
+import { addArtistToDB } from "@/lib/actions" 
 import { artistsTable } from "@/lib/db/schema"
 
 // purpose: drill artist options to all multiselects 

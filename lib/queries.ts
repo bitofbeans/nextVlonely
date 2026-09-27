@@ -53,3 +53,15 @@ export async function queryArtistOptions() {
         .select()
         .from(artistsTable)
 }
+
+/**
+ * Returns artist data based on their unique slug
+ */
+export async function queryArtistBySlug(slug: string) {
+    const [artist] = await db
+        .select()
+        .from(artistsTable)
+        .where(eq(artistsTable.slug, slug))
+    
+    return artist
+}

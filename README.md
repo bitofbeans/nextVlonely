@@ -53,12 +53,11 @@ MEDIA
 
 ## TODO: For now
 
-- [ ] Review EditMode.tsx
-- [ ] Review admin/page.tsx
 - [x] Sort and clear up database for shows and artists  
-- [ ] Add "add artist" capabilities
-- [ ] Color artists names/add links
-- [ ] Info modal on button click
+- [x] Add "add artist" capabilities
+- [x] Color artists names/add links
+- [x] Info modal on button click
+- [x] Artists pages links
 
 - [ ] Archive page
   - [ ] Design layout   
@@ -73,7 +72,7 @@ MEDIA
   - [x] Edit existing show
   - [ ] Add photos to show
     - [x] Upload image panel for cloudflare 
-  - [ ] Add artist server function
+  - [x] Add artist server function
 - [ ] Add more hearts and stars around page stylistically
 - [ ] FINAL Update Cloudflare URL (next.config.ts, .env)
 - [ ] FINAL Polish on style

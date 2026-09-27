@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 
 
 type ModalProps = {
@@ -29,8 +29,8 @@ export function Modal({title, children, isOpen, onClose}: ModalProps) {
                 <button className="ml-auto cursor-pointer text-6xl h-5 leading-0" onClick={onClose}>×</button>
 
             </div>
-            <p className="px-10 pt-4 text-white/50 font-harmond text-3xl">DESCRIPTION </p>
-            <div className="px-15 pb-5">
+            <p className="px-10 pt-4 text-white/30 font-harmond text-2xl tracking-wider">DESCRIPTION </p>
+            <div className="px-15 pb-5 text-xl">
                 {children}
             </div>
             <div className="">

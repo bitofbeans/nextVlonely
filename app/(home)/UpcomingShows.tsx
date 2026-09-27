@@ -2,7 +2,7 @@ import { getMediaUrl } from "@/lib/media"
 import ShowCard from "./ShowCard"
 import { ShowEdit } from "./ShowEdit"
 import { ArtistOptionProvider } from "./ArtistOptionsProvider"
-import { queryArtistOptions, queryUpcomingShows } from "./_lib/queries"
+import { queryArtistOptions, queryUpcomingShows } from "@/lib/queries"
 
 export default async function UpcomingShows() {
     const shows = await queryUpcomingShows()
