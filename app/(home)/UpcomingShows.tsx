@@ -1,11 +1,11 @@
 import { getMediaUrl } from "@/lib/media"
 import ShowCard from "./ShowCard"
-import { ShowEdit } from "./ShowEdit"
-import { ArtistOptionProvider } from "./ArtistOptionsProvider"
+import { ShowEdit } from "../components/ShowEdit"
+import { ArtistOptionProvider } from "../components/ArtistOptionsProvider"
 import { queryArtistOptions, queryShows } from "@/lib/queries"
 
 export default async function UpcomingShows() {
-    const shows = await queryShows("new")
+    const shows = await queryShows({ type: "new"})
     const artistOptions = await queryArtistOptions() // initial artist options for context 
 
     if (shows.length >= 1) {

@@ -1,11 +1,15 @@
 import { db } from "@/lib/db"
 import { artistsTable, mediaTable, showsArtistsTable, showsTable } from "@/lib/db/schema"
-import { eq, desc, asc, lt, gt } from "drizzle-orm"
+import { eq, desc, asc, lt, gt, and } from "drizzle-orm"
 
-type ShowWithArtists = {
+export type ShowWithArtists = {
     show: (typeof showsTable.$inferSelect)
     poster: (typeof mediaTable.$inferSelect) | null,
     artists: NonNullable<(typeof artistsTable.$inferSelect)>[],
+}
+type QueryShowsProps = {
+    type: "old" | "new" | "all",
+    slug?: string
 }
 /**
  * Returns an array of objects, with each object containing database data for:
@@ -14,21 +18,24 @@ type ShowWithArtists = {
  * * The artists belonging to that show
  * 
  */
-
-export async function queryShows(type: "old" | "new" | "all") {
+export async function queryShows({type, slug}: QueryShowsProps) {
 
     const dateNow = new Date().toISOString()
 
-    const filter =
+    const dateFilter =
         type == "old" ? lt(showsTable.date, dateNow) :
         type == "new" ? gt(showsTable.date, dateNow) :
+        undefined
+
+    const slugFilter = 
+        slug != null ? eq(showsTable.slug, slug) :
         undefined
 
     // rows has multiple objects for one show and multiple artists
     const rows = await db
         .select({ show: showsTable, poster: mediaTable, artist: artistsTable})
         .from(showsTable)
-        .where(filter)
+        .where(and(dateFilter, slugFilter))
         .leftJoin(mediaTable, eq(showsTable.posterMediaID, mediaTable.id))
         .leftJoin(showsArtistsTable, eq(showsTable.id, showsArtistsTable.showID))
         .leftJoin(artistsTable, eq(showsArtistsTable.artistID, artistsTable.id))

@@ -45,9 +45,11 @@ export async function postShow(formData: FormData) {
     }
 
     // Construct show object
+    const title = getString("title", formData)
     const show: typeof showsTable.$inferInsert = {
         id: getID(formData),
-        title: getString("title", formData),
+        slug: convertToSlug(title),
+        title: title,
         description: getString("description", formData),
         venue: getString("venue", formData),
         date: getString("date", formData),

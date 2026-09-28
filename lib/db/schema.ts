@@ -1,7 +1,8 @@
 import { sql } from "drizzle-orm";
 import { 
   check, integer, pgTable, varchar, text, serial, 
-  timestamp, primaryKey, unique,uuid, type AnyPgColumn
+  timestamp, primaryKey, unique,uuid, type AnyPgColumn,
+  pgEnum
 } from "drizzle-orm/pg-core";
 
 export const showsTable = pgTable(
@@ -9,6 +10,7 @@ export const showsTable = pgTable(
   {
     id: serial().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
+    slug: varchar({ length: 255 }).notNull().unique(),
     description: text().notNull(),
     venue: varchar({ length: 255 }).notNull(),
     date: timestamp({ withTimezone: false, mode: "string" }).notNull(),
@@ -49,9 +51,12 @@ export const showsArtistsTable = pgTable(
 
   ]);
 
+export const mediaTypeEnum = pgEnum(("media_type"), ["poster", "gallery_image", "gallery_video", "artist_profile"])
+
 export const mediaTable = pgTable("media", {
   id: serial().primaryKey(),
   objectKey: uuid("object_key").defaultRandom().notNull(),
+  mediaType: mediaTypeEnum("media_type").default("gallery_image").notNull(),
   uploadTimestamp: timestamp("upload_timestamp", { withTimezone: false })
     .notNull().defaultNow(),
   showID: integer("show_id")

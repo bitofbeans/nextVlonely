@@ -1,15 +1,15 @@
 "use client";
 
 import CreatableSelect from "react-select/creatable"
-import { useContext, useId, useState } from "react";
+import { useId, useState } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
 import { Collapsible } from "@base-ui/react";
 import imageCompression from "browser-image-compression"
 import type { showsTable } from "@/lib/db/schema";
 import { artistsTable } from "@/lib/db/schema";
-import { useEditMode } from "../components/EditModeProvider";
-import { CaretRightIcon } from "../components/Icons";
+import { useEditMode } from "./EditModeProvider";
+import { CaretRightIcon } from "./Icons";
 import { postShow, deleteShow } from "@/lib/actions";
 import { useArtistOptions } from "./ArtistOptionsProvider";
 import { MultiValue } from "react-select";
@@ -133,7 +133,7 @@ export function ShowEditForm({ defaultShow, posterUrl, defaultArtists, saveActio
                 </label>
             </div>
             <p id={`${id}-date-help`} className="-mt-4 text-sm text-white/50">
-                Enter the local time at the venue. NOTE: Shows before today's date are moved to 'archive'
+                Enter the local time at the venue. NOTE: Shows before today's date are moved to 'archive', shows after are moved to upcoming shows
             </p>
 
             <label className={labelClassName}>

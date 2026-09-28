@@ -55,18 +55,19 @@ MEDIA
 
 ## TODO: For now
 
-- [x] Sort and clear up database for shows and artists  
-- [x] Add "add artist" capabilities
-- [x] Color artists names/add links
-- [x] Info modal on button click
-- [x] Artists pages links
-
+- [x] Finish home page
+  - [x] previous tasks...
+  - [x] Sort and clear up database for shows and artists  
+  - [x] Add "add artist" capabilities
+  - [x] Color artists names/add links
+  - [x] Info modal on button click
+  - [x] Artists pages links
 - [ ] Archive page
-  - [ ] Design layout   
-  - [ ] Make template page for each show
-  - [ ] Implement...
+  - [x] Design layout   
+  - [x] Make template page for each show
+  - [ ] Implement gallery images
+  - [ ] Edit mode for old shows and gallery upload
 - [ ] Artists page
-  - [ ] Maybe this can be left as "coming soon"
   - [ ] Design layout   
   - [ ] Make template page for each show
 - [ ] Backend database server functions
@@ -78,7 +79,7 @@ MEDIA
 - [ ] Add more hearts and stars around page stylistically
 - [ ] FINAL Update Cloudflare URL (next.config.ts, .env)
 - [ ] FINAL Polish on style
-- [ ] FINAL Implement neon/vercel caching
+- [x] FINAL Implement neon/vercel caching
 - [ ] FINAL Get domain, edit metadata in layout.tsx
 - [ ] FINAL Search engine optimization
 

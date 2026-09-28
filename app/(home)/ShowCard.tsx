@@ -22,6 +22,7 @@ function ShowDetail({ children }: { children: React.ReactNode}) {
 type ShowCardProps = {
     id: number;
 	title: string;
+	slug: string;
     venue: string;
     date: string;
 	imageUrl: string | null;
@@ -33,6 +34,7 @@ type ShowCardProps = {
 export default function ShowCard({
 	id,
     title,
+	slug,
 	date,
 	venue,
 	description,
@@ -69,7 +71,7 @@ export default function ShowCard({
 
 
 	const adjustForPoster = imageUrl != "" ? "lg:grid-cols-[380px_minmax(0,1fr)]" : ""
-	const poster = (<Image className="lg:rounded-none rounded-t-4xl overflow-hidden bg-pink" src={imageUrl} width={300} height={300} alt=""/>)
+	const poster = (<Image className="relative lg:rounded-none rounded-t-4xl overflow-hidden bg-pink z-10" src={imageUrl} width={300} height={300} alt=""/>)
 	return (
 		<article className="flex flex-col w-[90vw] lg:w-[70vw] my-9">
 			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}
@@ -77,13 +79,13 @@ export default function ShowCard({
 				>
 				{description}
 			</Modal>
-			<header className={`relative grid w-full mx-auto max-w-[370px] xs:max-w-none ${adjustForPoster} bg-pink items-center py-1 z-0 lg:-z-10`}>
+			<header className={`relative grid w-full mx-auto max-w-[370px] xs:max-w-none ${adjustForPoster} bg-pink items-center py-1 z-10 lg:z-0`}>
 				<div className="pointer-events-none absolute inset-y-0 -left-px aspect-1/2">
 					<Image className="w-full object-contain" src="/SVG/headerCap.svg" alt="" width={25} height={25}/>
 				</div>
-				<h1 className="text-center text-balance xs:text-left col-start-2 xs:px-5 px-10 text-black font-bold xs:text-4xl py-1 text-3xl -mb-1">
+				<Link href={"/show/" + slug} className="text-center text-balance xs:text-left col-start-2 xs:px-5 px-10 text-black font-bold xs:text-4xl py-1 text-3xl -mb-1">
 					{title}
-				</h1>
+				</Link>
 				<div className="pointer-events-none absolute inset-y-0 -right-px aspect-1/2 -scale-x-100">
 					<Image className="w-full object-contain" src="/SVG/headerCap.svg" alt="" width={25} height={25}/>
 				</div>			
