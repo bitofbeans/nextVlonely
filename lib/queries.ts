@@ -80,3 +80,20 @@ export async function queryArtistBySlug(slug: string) {
     
     return artist
 }
+
+/**
+ * Returns all gallery photos for a given show
+ */
+export async function queryShowGalleryPhotos(showID: number) {
+    return await db
+        .select()
+        .from(mediaTable)
+        .where(
+            and(
+                eq(mediaTable.showID, showID),
+                eq(mediaTable.mediaType, "gallery_image")
+            )
+        )
+        
+
+}

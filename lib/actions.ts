@@ -1,7 +1,7 @@
 'use server'
 import { auth } from '@/lib/auth/server'
 import { db } from '@/lib/db';
-import { uploadFile, deleteFile } from '@/lib/media';
+import { deleteFile, getUploadMediaUrl } from '@/lib/media';
 import { showsTable, mediaTable, artistsTable, showsArtistsTable } from '@/lib/db/schema'
 import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
@@ -73,29 +73,18 @@ export async function postShow(formData: FormData) {
     }
 
     // check if user uploaded file for poster
-    const posterFile = formData.get("poster") as File | null
-    if (posterFile instanceof File && posterFile.size > 0) {
+    const posterUuid = formData.get("poster-uuid") as string | null
+    if (posterUuid) {
         if(show.posterMediaID) {
             // show already has picture, delete in cloudflare
-            deleteMediaByID(show.posterMediaID)
+            await deleteMediaFromBucketByID(show.posterMediaID)
 
             // and from database
             await db.delete(mediaTable)
                 .where(eq(mediaTable.id, show.posterMediaID))
         }
-        // add to file to db
-        const [newMedia] = await db.insert(mediaTable)
-            .values({ showID: show.id })
-            .returning();
-
-        // upload to cloudflare
-        await uploadFile(posterFile, newMedia.objectKey)
-
-        // connect show posterMediaId to id from media table
-        await db.update(showsTable)
-            .set({ posterMediaID: newMedia.id })
-            .where(eq(showsTable.id, show.id))
-        }    
+        await addMediaToDB(posterUuid, show.id, "poster", true)
+    }
     
     // remove old artists and add new ones
     const newShowArtistsString = (formData.get("artists")) as string | null
@@ -144,7 +133,7 @@ export async function deleteShow(formData: FormData) {
         
         // find id of poster if exists, and delete from bucket
         if (show.posterMediaID) {
-            deleteMediaByID(show.posterMediaID)
+            await deleteMediaFromBucketByID(show.posterMediaID)
         }
         await db.delete(showsTable)
             .where(eq(showsTable.id, showID))
@@ -158,7 +147,7 @@ export async function deleteShow(formData: FormData) {
  * Delete media from cloudflare based on its Neon database ID
  * 
  */
-async function deleteMediaByID(id: number) {
+async function deleteMediaFromBucketByID(id: number) {
     const [poster] = await db.select()
         .from(mediaTable)
         .where(eq(mediaTable.id, id))
@@ -197,4 +186,47 @@ export async function addArtistToDB({name, profileMediaID, instagramHandle, inst
         .returning()
 
     return newArtist
+}
+
+
+/**
+ * Add media to database
+ */
+export async function addMediaToDB(uuid: string, showID: number, type: typeof mediaTable.$inferInsert["mediaType"], poster: boolean = false) {
+    const { data: session } = await auth.getSession();
+    if (!session?.user) { throw new Error("Unauthorized") }
+    // add to file to db
+    const [newMedia] = await db.insert(mediaTable)
+        .values({ objectKey: uuid, showID: showID, mediaType: type })
+        .returning();
+    console.log(newMedia.id)
+    if (poster) {
+        // connect show posterMediaId to id from media table
+        await db.update(showsTable)
+            .set({ posterMediaID: newMedia.id })
+            .where(eq(showsTable.id, showID))
+    }
+
+}
+
+/**
+ * Adds many files to gallery for a certain show
+ */
+export async function addPicsToGallery(formData: FormData) {
+    const { data: session } = await auth.getSession()
+
+    if (!session?.user) {
+        throw new Error("Unauthorized")
+    }
+    const idString = formData.get("id") as string
+    const id = Number(idString)
+
+    const picUuids = formData.getAll('uuids') as string[];
+
+    for (const uuid of picUuids) {
+        console.log(uuid)
+        await addMediaToDB(uuid, id, "gallery_image")
+    }
+    
+    revalidatePath("/");
 }

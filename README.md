@@ -67,6 +67,7 @@ MEDIA
   - [x] Make template page for each show
   - [ ] Implement gallery images
   - [ ] Edit mode for old shows and gallery upload
+  - [ ] Have show page BG be gallery_video
 - [ ] Artists page
   - [ ] Design layout   
   - [ ] Make template page for each show
@@ -77,6 +78,7 @@ MEDIA
     - [x] Upload image panel for cloudflare 
   - [x] Add artist server function
 - [ ] Add more hearts and stars around page stylistically
+- [ ] Try replacing nav crosses w logos
 - [ ] FINAL Update Cloudflare URL (next.config.ts, .env)
 - [ ] FINAL Polish on style
 - [x] FINAL Implement neon/vercel caching

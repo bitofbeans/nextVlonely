@@ -31,7 +31,8 @@ export const ArtistOptionProvider = ({ children, artistOptions }: ArtistOptionPr
         ])
     }
 
-    return (<ArtistOptionContext value={{artists, createArtistInOptions}}>
+    return (
+    <ArtistOptionContext value={{artists, createArtistInOptions}}>
         {children}
     </ArtistOptionContext>
     )

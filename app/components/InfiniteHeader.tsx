@@ -1,3 +1,5 @@
+"use client"
+import { useEffect, useRef, useState } from "react";
 
 type InfiniteHeaderProps = {
     text: string,
@@ -20,9 +22,24 @@ type InfiniteHeaderProps = {
 export default function InfiniteHeader({ text, repeats, direction, duration, buttonText, buttonLink, buttonColor }: InfiniteHeaderProps) {
     const fullString = (text + " ").repeat(15)
 
+    // const buttonTextRef = useRef(null)
+    // const [lines, setLines] = useState(repeats)
+
+    // useEffect(() => {
+    //     const buttonElement = buttonTextRef.current
+    //     if (buttonElement) {
+    //         const lineHeight = window.getComputedStyle(buttonElement).lineHeight
+    //         const scrollHeight = buttonElement.scrollHeight
+    //         const buttonLines = Math.round(scrollHeight / parseFloat(lineHeight))
+    //         setLines(Math.max(repeats, buttonLines))
+    //         console.log(lines)
+    //     }
+    // }, [])
+
+
     const animationClass = direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'
 	return (
-		<div className="relative w-full overflow-hidden py-1.5">
+		<div className="relative w-full py-1.5">
             {[...Array(repeats)].map((_, i) => {
                 return (
                     <div className={`flex ${animationClass} w-max`} style={{ animationDuration: duration + "s" }}  key={i}>
@@ -32,7 +49,7 @@ export default function InfiniteHeader({ text, repeats, direction, duration, but
             )})}
             <div className="absolute flex w-full h-full z-1 top-0 left-0 justify-center items-center">
                 {buttonText && (
-                    <div className="flex justify-center items-center w-max h-full bg-bg-black side-drop-shadows "> 
+                    <div className="flex justify-center items-center w-max h-full bg-bg-black side-drop-shadows text-center "> 
                         <a href={buttonLink} className={`text-3xl underline decoration-1 underline-offset-2 sm:text-5xl px-5 rounded-2xl ${buttonColor}`}>
                             {buttonText}
                         </a>

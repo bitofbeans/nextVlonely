@@ -1,6 +1,6 @@
 import { getMediaUrl } from "@/lib/media"
 import ShowCard from "./ShowCard"
-import { ShowEdit } from "../components/ShowEdit"
+import { ShowEditCollapsible } from "../components/ShowEdit"
 import { ArtistOptionProvider } from "../components/ArtistOptionsProvider"
 import { queryArtistOptions, queryShows } from "@/lib/queries"
 
@@ -11,13 +11,13 @@ export default async function UpcomingShows() {
     if (shows.length >= 1) {
         return (
             <ArtistOptionProvider artistOptions={artistOptions}>
-                <ShowEdit />
-                {shows.map(({show, poster, artists}) => (
+                <ShowEditCollapsible />
+                {shows.map(async ({show, poster, artists}) => (
                     <div key={show.id}>
                         <ShowCard  {...show} artists={artists}
                         
-                            imageUrl={poster ? getMediaUrl(poster.objectKey) : null}    />
-                        <ShowEdit defaultShow={show} defaultArtists={artists}/>   
+                            imageUrl={poster ? await getMediaUrl(poster.objectKey) : null}    />
+                        <ShowEditCollapsible defaultShow={show} defaultArtists={artists}/>   
                     </div>
                 ))}
             </ArtistOptionProvider>
@@ -25,7 +25,7 @@ export default async function UpcomingShows() {
     } else {
         return (
             <ArtistOptionProvider artistOptions={artistOptions}>
-                <ShowEdit />
+                <ShowEditCollapsible />
                 <p className="m-10 my-20 text-3xl">
                     no upcoming shows yet, stay tuned...
                 </p>

@@ -2,7 +2,7 @@ import Hero from "../components/Hero"
 import InfiniteHeader from "../components/InfiniteHeader"
 import { queryArtistOptions, queryShows } from "@/lib/queries"
 import { ArtistOptionProvider } from "../components/ArtistOptionsProvider"
-import { ShowEdit } from "../components/ShowEdit"
+import { ShowEditCollapsible } from "../components/ShowEdit"
 import ShowCard from "./ShowCard"
 
 
@@ -20,7 +20,7 @@ export default async function Archive() {
 
             <div className="m-10">
                 <ArtistOptionProvider artistOptions={artistOptions}>
-                    <ShowEdit />
+                    <ShowEditCollapsible />
                     {shows.map((showData, index)=> (
                         <ShowCard key={index} {...showData} />
                     ))}

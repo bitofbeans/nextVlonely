@@ -3,14 +3,14 @@
 import CreatableSelect from "react-select/creatable"
 import { useId, useState } from "react";
 import { useFormStatus } from "react-dom";
-import Image from "next/image";
-import { Collapsible } from "@base-ui/react";
+import { Collapsible, Form } from "@base-ui/react";
 import imageCompression from "browser-image-compression"
 import type { showsTable } from "@/lib/db/schema";
 import { artistsTable } from "@/lib/db/schema";
+import { getUploadMediaUrl } from "@/lib/media";
 import { useEditMode } from "./EditModeProvider";
 import { CaretRightIcon } from "./Icons";
-import { postShow, deleteShow } from "@/lib/actions";
+import { postShow, deleteShow, addPicsToGallery } from "@/lib/actions";
 import { useArtistOptions } from "./ArtistOptionsProvider";
 import { MultiValue } from "react-select";
 
@@ -37,10 +37,25 @@ const mapArtistDataToOptions = (artistData: Artist[] | undefined): ArtistOption[
 
 type ShowFormProps = {
     defaultShow?: Show;
-    posterUrl?: string | null;
     saveAction: ((formData: FormData) => Promise<void>)
     defaultArtists?: Artist[]
 };
+
+const uploadMediaToCloudflare = async (file: File): Promise<string> => {
+    const uuid = crypto.randomUUID()
+    
+    const uploadUrl = await getUploadMediaUrl(uuid, file.type)
+    console.log(uploadUrl)
+    const response = await fetch(uploadUrl, {
+            method: "PUT",
+            body: file,
+            headers: {
+                "Content-Type": file.type,
+        }
+    })
+    if (!response.ok) { throw new Error("Upload failed")}
+    return uuid
+} 
 
 async function compressAndPostShow(formData: FormData) {
     const poster = formData.get("poster") as File | undefined
@@ -65,7 +80,7 @@ async function compressAndPostShow(formData: FormData) {
 const inputClassName = "w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2.5 text-base text-white placeholder:text-white/35 transition-colors hover:border-white/40 focus:border-pink focus:outline-2 focus:outline-pink/30";
 const labelClassName = "flex flex-col my-1 gap-1 text-base text-white/80";
 
-export function ShowEdit(props: Omit<ShowFormProps, "saveAction">) {
+export function ShowEditCollapsible(props: Omit<ShowFormProps, "saveAction">) {
     const { isEditMode } = useEditMode();
     if (!isEditMode) return null;
 
@@ -89,12 +104,20 @@ export function ShowEdit(props: Omit<ShowFormProps, "saveAction">) {
     );
 }
 
-export function ShowEditForm({ defaultShow, posterUrl, defaultArtists, saveAction }: ShowFormProps) {
+export function ShowEditForm({ defaultShow, defaultArtists, saveAction }: ShowFormProps) {
     const id = useId();
-
+    const submitShowEditForm = async (formData: FormData) => {
+        const poster = formData.get("poster") as File | null
+        if (poster instanceof File && poster.size > 0) {
+            const uuid = await uploadMediaToCloudflare(poster)
+            formData.append("poster-uuid", uuid)
+            formData.delete("poster")
+        }
+        await saveAction(formData)
+    }
     return (
         <form
-            action={saveAction}
+            action={submitShowEditForm}
             className="flex flex-col gap-5"
         >
             {defaultShow && <input type="hidden" name="id" value={defaultShow.id} />}
@@ -143,10 +166,6 @@ export function ShowEditForm({ defaultShow, posterUrl, defaultArtists, saveActio
             </label>
 
             <div className="flex flex-col gap-3 rounded-lg border border-dashed border-white/25 p-4">
-                {posterUrl && (
-                    <Image src={posterUrl} alt="Current show poster" width={160} height={200}
-                        className="h-auto max-h-48 w-auto max-w-full rounded-md object-contain" />
-                )}
                 <label className={labelClassName}>
                     {defaultShow?.posterMediaID ? "Replace poster (optional)" : "Poster (optional)"}
                     <input type="file" name="poster" accept="image/jpeg,image/png,image/webp"
@@ -159,14 +178,14 @@ export function ShowEditForm({ defaultShow, posterUrl, defaultArtists, saveActio
             </div>
 
             <div className="flex justify-end gap-5 border-t border-white/10 pt-4">
-                <SubmitButton editing={!!defaultShow} />
+                <SubmitButton buttonText={!!defaultShow ? "Save changes" : "Add show"} />
                 {!!defaultShow && <DeleteButton />}
             </div>
         </form>
     );
 }
 
-function SubmitButton({ editing }: { editing: boolean }) {
+function SubmitButton({ buttonText }: { buttonText: string }) {
     const { pending } = useFormStatus();
 
     return (
@@ -175,7 +194,7 @@ function SubmitButton({ editing }: { editing: boolean }) {
                 transition-colors enabled:hover:bg-pink/80 
                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink 
                 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">
-            {pending ? "Saving…" : editing ? "Save changes" : "Add show"}
+            {pending ? "Saving…" : buttonText}
         </button>
     );
 }
@@ -269,5 +288,70 @@ function ArtistsSelect({ defaultArtists }: { defaultArtists: ShowFormProps["defa
             <input name="artists" type="hidden" defaultValue={artistIDs}/>
 
         </div>
+    )
+}
+
+export function GalleryPhotoUpload({showID}: { showID: number }) {
+    const { isEditMode } = useEditMode();
+    if (!isEditMode) return null
+    return (
+        <Collapsible.Root className="mx-auto my-4 w-full max-w-3xl rounded-xl border border-white/20 bg-gray-900">
+            <Collapsible.Trigger
+                className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-xl px-4 py-3 text-xl transition-colors hover:bg-gray-800 data-panel-open:text-pink focus-visible:outline-2 focus-visible:outline-pink"
+            >
+                {`Upload photos to Gallery`}
+                <CaretRightIcon aria-hidden="true" className="size-5 shrink-0 transition-transform duration-200 group-data-panel-open:rotate-90 motion-reduce:transition-none" />
+            </Collapsible.Trigger>
+            <Collapsible.Panel
+                keepMounted
+                className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-starting-style:h-0 data-ending-style:h-0 motion-reduce:transition-none"
+            >
+                <div className="border-t border-white/10 p-4 sm:p-6">
+                    <GalleryPhotoUploadForm showID={showID} />
+                </div>
+            </Collapsible.Panel>
+        </Collapsible.Root>
+    )
+}
+
+export function GalleryPhotoUploadForm({showID}: { showID: number }) {
+    const submitGalleryPhotoUpload = async (formData: FormData) => {
+        
+        const files = formData.getAll('files') as File[];
+
+
+        for (const file of files) {
+            const uuid = await uploadMediaToCloudflare(file)
+            formData.append("uuids", uuid)
+        }
+
+        formData.delete("files")
+        await addPicsToGallery(formData)
+
+    }
+    return (
+        <form
+            action={submitGalleryPhotoUpload}
+            className="flex flex-col gap-5"
+        >
+            <input type="hidden" name="id" value={showID} />
+
+            <div className="flex flex-col p-3 border border-[#404653] rounded-2xl items-center">
+                <div className="flex flex-col gap-3 rounded-lg border border-dashed border-white/25 p-4">
+                <label className={labelClassName}>
+                    Upload Images:
+                    <input type="file" name="files" multiple accept="image/jpeg,image/png,image/webp"
+                        aria-describedby={`${showID}-poster-help`}
+                        className="w-full min-w-0 rounded-md text-sm text-white/70 file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-white hover:file:bg-white/20 focus-visible:outline-2 focus-visible:outline-pink" />
+                </label>
+                <p id={`${showID}-poster-help`} className="text-sm text-white/50">
+                    JPG, PNG or WebP.
+                </p>
+                </div>
+                <div className="mt-3">
+                    <SubmitButton buttonText={"Upload"} />
+                </div>
+            </div>
+        </form>
     )
 }

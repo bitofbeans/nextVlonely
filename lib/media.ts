@@ -1,5 +1,8 @@
+"use server"
 import { S3Client, DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { auth } from '@/lib/auth/server'
+
 
 // interact with with sdk
 const S3 = new S3Client({
@@ -12,39 +15,39 @@ const S3 = new S3Client({
 })
 
 /** 
- * Uploads a file to Cloudflare R2 bucket using a signed URL
- * This avoids vercel bandwith coming from sending the file through the server itself
+ * Gets signed url from cloudflare to upload to
  */
-export async function uploadFile(file: File, key: string) {
+export async function getUploadMediaUrl(key: string, fileType: string) {
+    // Check if authenticated
+    const { data: session } = await auth.getSession();
+    
+    if (!session?.user) {
+        throw new Error("Unauthorized")
+    }
+
     const uploadUrl = await getSignedUrl(
         S3,
         new PutObjectCommand({
             Bucket: process.env.R2_BUCKET_NAME!,
             Key: key,
-            ContentType: file.type
+            ContentType: fileType
         }),
         { expiresIn: 600 }
     )
-
-    const response = await fetch(uploadUrl, {
-        method: "PUT",
-        body: file,
-        headers: {
-            "Content-Type": file.type,
-        }
-    })
-
-    if (!response.ok) {
-        throw new Error("Upload failed")
-    }
-
-    return response
+    return uploadUrl
 }
 
 /** 
  * Deletes a file from the Cloudflare R2 bucket by its key
  */
 export async function deleteFile(key: string) {
+    // Check if authenticated
+    const { data: session } = await auth.getSession();
+    
+    if (!session?.user) {
+        throw new Error("Unauthorized")
+    }
+
 
     const command = new DeleteObjectCommand({
         Bucket: process.env.R2_BUCKET_NAME!,
@@ -59,6 +62,6 @@ export async function deleteFile(key: string) {
 /** 
  * Returns the key to access a file from the Cloudflare R2 bucket based on its key
  */
-export function getMediaUrl(objectKey: string) {
+export async function getMediaUrl(objectKey: string) {
     return `${process.env.R2_PUBLIC_BASE_URL!}/${objectKey}`;
 }
