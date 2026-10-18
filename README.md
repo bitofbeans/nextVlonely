@@ -71,11 +71,13 @@ MEDIA
   - [ ] Moving queue for conveyer belt (fix crop)
 - [ ] Artists page
   - [ ] Design layout   
-  - [ ] Make template page for each show
-- [ ] Backend database server functions
+  - [ ] Featured artists section
+  - [x] Page for each artist
+  - [x] Make template page for each show
+- [X] Backend database server functions
   - [x] Add show
   - [x] Edit existing show
-  - [ ] Add photos to show
+  - [X] Add photos to show
     - [x] Upload image panel for cloudflare 
   - [x] Add artist server function
 - [ ] Add more hearts and stars around page stylistically

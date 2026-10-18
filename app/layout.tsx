@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image"
 import localFont from 'next/font/local'
 import Nav from "./components/NavBar";
 import { EditModeProvider } from "./components/EditModeProvider";
@@ -69,14 +70,19 @@ export const metadata: Metadata = {
 
 function Footer() {
     return (
-        <div className='mt-5 grid grid-cols-5 w-full text-s place-items-center '>
-            <div className="col-start-3 min-w-max text-white/20">
-                website by <a className="pl-1 underline decoration-1 underline-offset-2 text-blue-400/30" href="https://bitbeans.me">bitbeans</a>
+      <div className="flex w-full justify-center py-9">
+            <div className="grid grid-cols-3 place-items-center w-full max-w-220 items-center text-center text-xl font-elgoc text/">
+                <div className="w-full text-white inline-block">
+                    website by <a className="inline pl-1 underline decoration-1 underline-offset-2 text-blue-400" href="https://bitbeans.me">bitbeans</a>
+                </div>
+                
+                <Image className='h-auto rotate-180' src='/SVG/verticalStar.svg' alt="star" width={30} height={44.36} />
+                
+                <Link className=" p-2 text-blue-400 underline decoration-1 underline-offset-2" href="/admin">log-in</Link>
+
             </div>
-            <div className='w-full flex justify-end col-start-5'>
-                <Link className="text-xl text-white/10 p-2" href="/admin">log-in</Link>
-            </div>
-        </div>
+    </div>
+
     )
 }
 

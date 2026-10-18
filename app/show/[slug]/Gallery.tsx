@@ -17,7 +17,7 @@ export default async function Gallery({ showID }: { showID: number }) {
             {galleryPhotos.length > 0 ? (
                 <GalleryPhotos photos={galleryPhotos} />
             ) : (
-                <div className="my-20 text-3xl">
+                <div className="my-20 text-3xl text-center">
                     no photos yet...
                 </div>
             )}

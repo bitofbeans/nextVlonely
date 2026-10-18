@@ -19,7 +19,7 @@ export default async function ShowCard({show, poster, artists}: ShowWithArtists 
                 </div>
                 <Image className="border border-gray-700" width={250} height={500} alt="" src={poster ? await getMediaUrl(poster.objectKey) : "/SVG/placeholderPoster.svg"} />
             </div>
-            <h1 className="px-4 py-3 text-5xl font-harmond font-black text-center">
+            <h1 className="px-4 py-3 text-3xl sm:text-5xl font-harmond font-black text-center">
                 {show.title}
             </h1>
         </Link>
