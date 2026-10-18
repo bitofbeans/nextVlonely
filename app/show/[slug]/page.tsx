@@ -9,6 +9,7 @@ import { ExternalIcon } from "@/app/components/Icons"
 import { ShowEditCollapsible } from "@/app/components/ShowEdit"
 import { ArtistOptionProvider } from "@/app/components/ArtistOptionsProvider"
 import Gallery from "./Gallery"
+import { dateFormat } from "@/lib/helpers"
 
 
 export default async function Show({ params }: { params: Promise<{ slug: string }>}) {
@@ -41,8 +42,9 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
                     <div className="m-16" />
                     <BackButton className={"px-5 py-2 m-"} />
                     <Image width={350} height={500} alt="" src={poster ? await getMediaUrl(poster.objectKey) : "/SVG/placeholderPoster.svg"} />
-                    <div className="font-harmond font-black max-w-full mt-6">
-                        <InfiniteHeader buttonText={title} text={title} repeats={1} direction="right" duration={60} />
+                    <div className="relative font-harmond font-black max-w-full mt-6">
+                        <InfiniteHeader text={title} repeats={1} direction="right" duration={60} />
+
                     </div>
                     <ShowEditCollapsible defaultShow={show} defaultArtists={artists}/>   
                     <section className="my-5 flex flex-col items-center border border-white/15 rounded-2xl bg-white/3 p-6 w-full max-w-2xl font-harmond font-black text-3xl">
@@ -67,27 +69,18 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
                         </div>
                     </section>
                     <section className="flex flex-col items-center border border-white/15 rounded-2xl bg-white/3 p-6 w-full max-w-2xl font-harmond font-black">
-
-                        <p className="max-w-lg font-elgoc font-medium text-xl py-3 whitespace-pre-wrap break-normal">
+                        <h1 className="text-2xl mt-4">
+                            DATE
+                        </h1>
+                        <h2 className="font-elgoc font-medium text-xl mb-2">
+                            {dateFormat(show.date)}
+                        </h2>
+                        <h1 className="text-2xl">
+                            DESCRIPTION
+                        </h1>
+                        <p className="max-w-lg font-elgoc font-medium text-xl whitespace-pre-wrap break-normal">
                             {description}
                         </p>
-                        <Link
-                            href={ticketLink}
-                            className="relative inline-flex h-11 w-36 shrink-0 font-elgoc font-medium
-                                        items-center justify-center text-2xl text-white
-                                        focus-visible:outline-2 focus-visible:outline-offset-4"
-                            >
-                            <img
-                                src="/SVG/button.svg"
-                                alt=""
-                                className="pointer-events-none absolute inset-0 h-full w-full"
-                            />
-                            <span className={`relative flex items-center ${ticketUrl == "" ? "line-through" : ""}`}>
-                                tickets
-                                {ticketLink != "" ? <ExternalIcon /> : ""}
-
-                            </span>
-                        </Link>    
 
                     </section>
                     <div className="font-harmond font-black max-w-full mt-14">

@@ -39,7 +39,7 @@ export default function InfiniteHeader({ text, repeats, direction, duration, but
 
     const animationClass = direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'
 	return (
-		<div className="relative w-full py-1.5">
+		<div className="relative w-full py-1.5 overflow-clip">
             {[...Array(repeats)].map((_, i) => {
                 return (
                     <div className={`flex ${animationClass} w-max`} style={{ animationDuration: duration + "s" }}  key={i}>

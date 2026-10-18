@@ -76,12 +76,8 @@ export async function postShow(formData: FormData) {
     const posterUuid = formData.get("poster-uuid") as string | null
     if (posterUuid) {
         if(show.posterMediaID) {
-            // show already has picture, delete in cloudflare
-            await deleteMediaFromBucketByID(show.posterMediaID)
-
-            // and from database
-            await db.delete(mediaTable)
-                .where(eq(mediaTable.id, show.posterMediaID))
+            // show already has picture, delete in cloudflare and db
+            await deleteMediaByID(show.posterMediaID)
         }
         await addMediaToDB(posterUuid, show.id, "poster", true)
     }
@@ -133,7 +129,7 @@ export async function deleteShow(formData: FormData) {
         
         // find id of poster if exists, and delete from bucket
         if (show.posterMediaID) {
-            await deleteMediaFromBucketByID(show.posterMediaID)
+            await deleteMediaByID(show.posterMediaID)
         }
         await db.delete(showsTable)
             .where(eq(showsTable.id, showID))
@@ -144,14 +140,38 @@ export async function deleteShow(formData: FormData) {
 }
 
 /**
- * Delete media from cloudflare based on its Neon database ID
+ * Delete media from neon and cloudflare based on it's Neon database ID
  * 
  */
-async function deleteMediaFromBucketByID(id: number) {
+export async function deleteMediaByID(id: number) {
+    const { data: session } = await auth.getSession();
+    
+    if (!session?.user) {
+        throw new Error("Unauthorized")
+    }
     const [poster] = await db.select()
         .from(mediaTable)
         .where(eq(mediaTable.id, id))
-    deleteFile(poster.objectKey)
+    await deleteMediaByObjectKey(poster.objectKey)
+}
+
+/**
+ * Delete media from neon and cloudflare based on it's object key
+ * 
+ */
+export async function deleteMediaByObjectKey(objectKey: string) {
+    const { data: session } = await auth.getSession();
+    
+    if (!session?.user) {
+        throw new Error("Unauthorized")
+    }
+
+    await deleteFile(objectKey)
+
+    await db.delete(mediaTable)
+        .where(eq(mediaTable.objectKey, objectKey))
+
+    revalidatePath("/")
 }
 
 

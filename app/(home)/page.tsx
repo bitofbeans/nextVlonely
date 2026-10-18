@@ -48,12 +48,12 @@ export default async function Home() {
                 <HeroSVG src="/SVG/friendsText.svg" top={77.5} left={54.2} scale={35} variant="float" duration={5.8} delay={-4.2} distance={12} />
             </Hero>
             
-            <InfiniteHeader text="about" repeats={1} direction="left" duration={20} />
-            <About />
 
             <InfiniteHeader text="upcoming shows" repeats={1} direction="right" duration={39} />
-
             <UpcomingShows />
+            
+            <InfiniteHeader text="about" repeats={1} direction="left" duration={20} />
+            <About />
 
             <InfiniteHeader text="gallery" repeats={2} direction="left" duration={60} buttonText='past shows archive' buttonLink='/archive' buttonColor='text-white' />
             <Spacer spacing={5} />

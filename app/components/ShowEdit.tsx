@@ -3,14 +3,14 @@
 import CreatableSelect from "react-select/creatable"
 import { useId, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { Collapsible, Form } from "@base-ui/react";
+import { Collapsible } from "@base-ui/react";
 import imageCompression from "browser-image-compression"
 import type { showsTable } from "@/lib/db/schema";
 import { artistsTable } from "@/lib/db/schema";
 import { getUploadMediaUrl } from "@/lib/media";
 import { useEditMode } from "./EditModeProvider";
-import { CaretRightIcon } from "./Icons";
-import { postShow, deleteShow, addPicsToGallery } from "@/lib/actions";
+import { CaretRightIcon, XIcon } from "./Icons";
+import { postShow, deleteShow, addPicsToGallery, deleteMediaByObjectKey } from "@/lib/actions";
 import { useArtistOptions } from "./ArtistOptionsProvider";
 import { MultiValue } from "react-select";
 
@@ -41,7 +41,10 @@ type ShowFormProps = {
     defaultArtists?: Artist[]
 };
 
-const uploadMediaToCloudflare = async (file: File): Promise<string> => {
+const uploadMediaToCloudflare = async (file: File, compress:boolean = false): Promise<string> => {
+    if (compress) {
+        file = await compressImage(file)
+    }
     const uuid = crypto.randomUUID()
     
     const uploadUrl = await getUploadMediaUrl(uuid, file.type)
@@ -57,24 +60,15 @@ const uploadMediaToCloudflare = async (file: File): Promise<string> => {
     return uuid
 } 
 
-async function compressAndPostShow(formData: FormData) {
-    const poster = formData.get("poster") as File | undefined
-
-    if (poster != undefined && poster.size > 1) {
-        const compressed = await imageCompression(poster, {
+async function compressImage(file: File): Promise<File> {
+    if (file != undefined && file.size > 1) {
+        const compressed = await imageCompression(file, {
             maxWidthOrHeight: 1600,
             fileType: "image/webp"
         })
-        if (compressed.size > 850000) {
-            throw new Error("Image is too large")
-        }
-        formData.set(
-            "poster",
-            compressed,
-            poster.name.replace(/\.[^.]+$/, "") + ".webp" // changes filetype to webp
-        )
+        return compressed
     }
-    await postShow(formData)
+    return file
 }
 
 const inputClassName = "w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2.5 text-base text-white placeholder:text-white/35 transition-colors hover:border-white/40 focus:border-pink focus:outline-2 focus:outline-pink/30";
@@ -97,7 +91,7 @@ export function ShowEditCollapsible(props: Omit<ShowFormProps, "saveAction">) {
                 className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-starting-style:h-0 data-ending-style:h-0 motion-reduce:transition-none"
             >
                 <div className="border-t border-white/10 p-4 sm:p-6">
-                    <ShowEditForm key={props.defaultShow?.id ?? "new"} {...props} saveAction={compressAndPostShow} defaultArtists={props.defaultArtists} />
+                    <ShowEditForm key={props.defaultShow?.id ?? "new"} {...props} saveAction={postShow} defaultArtists={props.defaultArtists} />
                 </div>
             </Collapsible.Panel>
         </Collapsible.Root>
@@ -353,5 +347,19 @@ export function GalleryPhotoUploadForm({showID}: { showID: number }) {
                 </div>
             </div>
         </form>
+    )
+}
+
+export function DeleteGalleryImageButton({objectKey}: {objectKey: string}) {
+    const { isEditMode } = useEditMode();
+    if (!isEditMode) return null;
+
+    const deleteImage = async () => {
+        deleteMediaByObjectKey(objectKey)
+    }
+    return (
+        <button className="cursor-pointer bg-red-600 pb-2 rounded-t-sm" onClick={deleteImage}>
+            <XIcon className="z-20" />
+        </button>
     )
 }

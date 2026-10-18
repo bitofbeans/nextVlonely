@@ -5,6 +5,7 @@ import { ExternalIcon } from "../components/Icons";
 import { artistsTable } from "@/lib/db/schema";
 import { Modal } from "./ShowDescModal";
 import { useState } from "react";
+import { dateFormat } from "@/lib/helpers";
 
 function ShowDetail({ children }: { children: React.ReactNode}) {
 	return (
@@ -44,17 +45,7 @@ export default function ShowCard({
 }: ShowCardProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
-	const dateObject = new Date(date)
-	
-	const dateConfig: Intl.DateTimeFormatOptions = {
-		month: "long",
-		weekday: "long",
-		day: "numeric",
-		hour: "numeric",
-		minute: "numeric",
-	}
-
-	const localDateTime = new Intl.DateTimeFormat("en-US", dateConfig).format(dateObject)
+	const localDateTime = dateFormat(date)
 
 	imageUrl = imageUrl ? imageUrl : ""
 	ticketUrl = ticketUrl ? ticketUrl : ""
