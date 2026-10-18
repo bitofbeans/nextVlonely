@@ -70,15 +70,21 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
                     </section>
                     <section className="flex flex-col items-center border border-white/15 rounded-2xl bg-white/3 p-6 w-full max-w-2xl font-harmond font-black">
                         <h1 className="text-2xl mt-4">
+                            VENUE
+                        </h1>
+                        <p className="font-elgoc font-medium text-xl mb-2">
+                            {show.venue}
+                        </p>
+                        <h1 className="text-2xl">
                             DATE
                         </h1>
-                        <h2 className="font-elgoc font-medium text-xl mb-2">
+                        <p className="font-elgoc font-medium text-xl mb-2">
                             {dateFormat(show.date)}
-                        </h2>
+                        </p>
                         <h1 className="text-2xl">
                             DESCRIPTION
                         </h1>
-                        <p className="max-w-lg font-elgoc font-medium text-xl whitespace-pre-wrap break-normal">
+                        <p className="max-w-lg font-elgoc font-medium text-xl whitespace-pre-wrap break-normal mb-4">
                             {description}
                         </p>
 

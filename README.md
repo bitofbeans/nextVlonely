@@ -65,9 +65,10 @@ MEDIA
 - [ ] Archive page
   - [x] Design layout   
   - [x] Make template page for each show
-  - [ ] Implement gallery images
-  - [ ] Edit mode for old shows and gallery upload
+  - [X] Implement gallery images
+  - [X] Edit mode for old shows and gallery upload
   - [ ] Have show page BG be gallery_video
+  - [ ] Moving queue for conveyer belt (fix crop)
 - [ ] Artists page
   - [ ] Design layout   
   - [ ] Make template page for each show
