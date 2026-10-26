@@ -27,7 +27,7 @@ export default function Nav() {
                         href="/artists"
                         className={`text-pink px-3 py-2 sm:p-5 md:p-10 ${pathname == '/artists' ? 'underline decoration-1 underline-offset-2' : ''}`}
                     >
-                        artists
+                        friends
                     </Link>
             </nav>
     </div>
