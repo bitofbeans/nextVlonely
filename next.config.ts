@@ -9,6 +9,9 @@ const devOrigins = process.env.NODE_ENV === "development"
         .map((address) => address.address)
     : [];
 
+
+console.log(devOrigins)
+
 const nextConfig: NextConfig = {
     allowedDevOrigins: devOrigins,
     images: {
@@ -17,6 +20,11 @@ const nextConfig: NextConfig = {
             // for CORS
             hostname: "pub-7d9f960619014d718c32e0a9bbc45403.r2.dev",
         }]
+    },
+    experimental: {
+        serverActions: {
+            allowedOrigins: ['vlonelyandfriends.vercel.app'],
+        },
     }
 };
 
