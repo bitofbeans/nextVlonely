@@ -54,7 +54,8 @@ const uploadMediaToCloudflare = async (file: File, compress:boolean = false): Pr
             body: file,
             headers: {
                 "Content-Type": file.type,
-        }
+            },
+            mode: "cors"
     })
     if (!response.ok) { throw new Error("Upload failed")}
     return uuid
