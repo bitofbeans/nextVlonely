@@ -70,7 +70,8 @@ MEDIA
   - [ ] Have show page BG be gallery_video
   - [ ] Moving queue for conveyer belt (fix crop)
 - [ ] Artists page
-  - [ ] Design layout   
+  - [X] Design layout   
+  - [ ] Implement artists page
   - [ ] Featured artists section
   - [x] Page for each artist
   - [x] Make template page for each show

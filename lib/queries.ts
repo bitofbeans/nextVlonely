@@ -20,7 +20,11 @@ type QueryShowsProps = {
  */
 export async function queryShows({type, slug}: QueryShowsProps) {
 
-    const dateNow = new Date().toISOString()
+    const date = new Date()
+    // Query from a day ago to account for time zone difference
+    date.setHours(date.getHours() - 24);
+    const dateNow = date.toISOString()
+
 
     const dateFilter =
         type == "old" ? lt(showsTable.date, dateNow) :

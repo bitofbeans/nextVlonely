@@ -48,7 +48,6 @@ const uploadMediaToCloudflare = async (file: File, compress:boolean = false): Pr
     const uuid = crypto.randomUUID()
     
     const uploadUrl = await getUploadMediaUrl(uuid, file.type)
-    console.log(uploadUrl)
     const response = await fetch(uploadUrl, {
             method: "PUT",
             body: file,
