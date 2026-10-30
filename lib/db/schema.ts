@@ -2,7 +2,8 @@ import { sql } from "drizzle-orm";
 import { 
   check, integer, pgTable, varchar, text, serial, 
   timestamp, primaryKey, unique,uuid, type AnyPgColumn,
-  pgEnum
+  pgEnum,
+  boolean
 } from "drizzle-orm/pg-core";
 
 export const showsTable = pgTable(
@@ -29,6 +30,7 @@ export const artistsTable = pgTable("artists", {
   instagramHandle: text("instagram_handle"),
   instagramUrl: text("instagram_url"),
   description: text(),
+  featured: boolean("is_featured").default(false)
 });
 
 export const showsArtistsTable = pgTable(

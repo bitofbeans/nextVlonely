@@ -5,7 +5,7 @@ import { ExternalIcon } from "../components/Icons";
 import { artistsTable } from "@/lib/db/schema";
 import { Modal } from "./ShowDescModal";
 import { useState } from "react";
-import { dateFormat } from "@/lib/helpers";
+import { dateFormat, colors } from "@/lib/helpers";
 
 function ShowDetail({ children }: { children: React.ReactNode}) {
 	return (
@@ -50,16 +50,6 @@ export default function ShowCard({
 	imageUrl = imageUrl ? imageUrl : ""
 	ticketUrl = ticketUrl ? ticketUrl : ""
 	
-	const colors = [
-		"pink",
-		"yellow",
-		"orange",
-		"purple",
-		"blue",
-		"teal",
-		"green"
-	]
-
 
 	const adjustForPoster = imageUrl != "" ? "lg:grid-cols-[380px_minmax(0,1fr)]" : ""
 	const poster = (<Image className="relative lg:rounded-none rounded-t-4xl overflow-hidden bg-pink z-10" src={imageUrl} width={300} height={300} alt=""/>)
