@@ -9,6 +9,7 @@
 
 @theme {
   /* Breakpoint */
+  --breakpoint-xxs: 360px;
   --breakpoint-xs: 500px;
 
   /* Colors */

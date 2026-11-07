@@ -108,4 +108,8 @@ Recreate frontend, make an interactive 3d version where each page is a different
 | Upper | Artists | Showcase artists > Artist roster with portraits or plaques, handles, genres, and bios | Walk past or interact with the plaques |
 
 
+## Notes
+
+- The home page hero is intentionally one full stage height.
+
 ## Goals

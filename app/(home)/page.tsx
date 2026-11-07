@@ -3,7 +3,9 @@ import InfiniteHeader from '../components/InfiniteHeader';
 import Hero from '../components/Hero'
 import HeroSVG from './HeroSVG'
 import UpcomingShows from './UpcomingShows';
+import AboutJoinText from './AboutJoinText';
 import Image from "next/image"
+import Link from "next/link"
 
 
 function About() {
@@ -19,13 +21,22 @@ function About() {
             </div>
             <div className="flex min-w-0 flex-col gap-6 text-[clamp(1.75rem,8vw,2.8rem)] leading-tight sm:gap-12">
                 <p>
-                    we throw shows with our friends
+                    we throw shows with our{' '}
+                    <Link href="/artists" className="inline-block whitespace-nowrap hover:underline decoration-1 focus-visible:underline underline-offset-4">
+                        <span className="text-yellow">f</span>
+                        <span className="text-orange">r</span>
+                        <span className="text-pink">i</span>
+                        <span className="text-purple">e</span>
+                        <span className="text-blue">n</span>
+                        <span className="text-teal">d</span>
+                        <span className="text-green">s</span>
+                    </Link>
                 </p>
                 <p>
                     events range from community networking to shows featuring some of your favorite underground artists
                 </p>
                 <p>
-                    <strong>join vlonely&friends today!</strong>
+                    <AboutJoinText />
                 </p>
             </div>
         </section>

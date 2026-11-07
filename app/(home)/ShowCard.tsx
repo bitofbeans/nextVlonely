@@ -54,7 +54,7 @@ export default function ShowCard({
 	const adjustForPoster = imageUrl != "" ? "lg:grid-cols-[380px_minmax(0,1fr)]" : ""
 	const poster = (<Image className="relative lg:rounded-none rounded-t-4xl overflow-hidden bg-pink z-10" src={imageUrl} width={300} height={300} alt=""/>)
 	return (
-		<article className="flex flex-col w-[90vw] lg:w-[70vw] my-9">
+		<article className="flex flex-col w-[90vw] lg:w-[70vw] mt-9 mb-11">
 			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}
 				title={title}
 				>

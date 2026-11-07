@@ -3,5 +3,6 @@ type SpacerProps = {
 };
 
 export default function Spacer({ spacing }: SpacerProps) {
-  return <div className={`m-${spacing}`} />;
+  // Uses Tailwind's --spacing variable to preserve its spacing scale without dynamic class names.
+  return <div aria-hidden="true" style={{ margin: `calc(var(--spacing) * ${spacing})` }} />;
 }
