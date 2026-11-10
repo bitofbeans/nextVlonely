@@ -18,13 +18,15 @@ const nextConfig: NextConfig = {
         remotePatterns: [{
             protocol: "https",
             // for CORS
-            hostname: "pub-7d9f960619014d718c32e0a9bbc45403.r2.dev",
-        }]
+            hostname: "r2.vlfriends.com",
+        }],
+        unoptimized: true // too many damn image optimizations. got enough fdt so use that for now
     },
     experimental: {
         serverActions: {
-            allowedOrigins: ['vlonelyandfriends.vercel.app'],
+            allowedOrigins: ['vlonelyandfriends.vercel.app', 'vlfriends.com'],
         },
+        
     }
 };
 

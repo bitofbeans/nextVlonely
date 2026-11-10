@@ -46,7 +46,7 @@ const elgoc = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vlonelyandfriends.vercel.app"),
+  metadataBase: new URL("https://vlfriends.com"),
 
   title: {
     default: "vlonely&friends | Underground Shows & Events",

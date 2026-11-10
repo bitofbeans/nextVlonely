@@ -83,11 +83,11 @@ MEDIA
   - [x] Add artist server function
 - [ ] Add more hearts and stars around page stylistically
 - [ ] Try replacing nav crosses w logos
-- [ ] FINAL Update Cloudflare URL (next.config.ts, .env)
+- [x] FINAL Update Cloudflare URL (next.config.ts, .env)
 - [ ] FINAL Polish on style
 - [x] FINAL Implement neon/vercel caching
-- [ ] FINAL Get domain, edit metadata in layout.tsx
-- [ ] FINAL Search engine optimization
+- [x] FINAL Get domain, edit metadata in layout.tsx
+- [x] FINAL Search engine optimization
 
 
 ## Before launching to a new domain name
