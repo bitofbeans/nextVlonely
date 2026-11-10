@@ -11,7 +11,7 @@ export const colors = [
         "green"
 ]
 
-export function dateFormat(date: Date) {
+export function dateFormat(date: string) {
     const dateObject = new Date(date)
     
     const dateConfig: Intl.DateTimeFormatOptions = {
