@@ -1,7 +1,7 @@
 "use client";
 
 import type { artistsTable } from "@/lib/db/schema";
-import { postArtist } from "@/lib/actions";
+import { deleteArtist, postArtist } from "@/lib/actions";
 import { compressImage, uploadMediaToCloudflare } from "@/lib/helpers";
 import EditForm from "./EditForm";
 
@@ -23,6 +23,7 @@ export default function ArtistEdit({ artist }: { artist?: Artist }) {
             title={artist ? `Edit ${artist.name}` : "Add artist"}
             action={submitArtist}
             submitText={artist ? "Save changes" : "Add artist"}
+            deleteAction={artist ? deleteArtist : undefined}
             fields={{
                 ...(artist ? { id: { type: "hidden" as const, value: artist.id } } : {}),
                 name: {

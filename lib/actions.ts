@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { deleteFile } from '@/lib/media';
 import { showsTable, mediaTable, artistsTable, showsArtistsTable } from '@/lib/db/schema'
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 
 /*
@@ -241,17 +242,7 @@ export async function postArtist(formdata: FormData) {
     }
 
     if (newMediaID && existingArtist?.profileMediaID) {
-        try {
-            const [oldMedia] = await db.select().from(mediaTable).where(eq(mediaTable.id, existingArtist.profileMediaID))
-            const [otherArtist] = await db.select({ id: artistsTable.id }).from(artistsTable)
-                .where(eq(artistsTable.profileMediaID, existingArtist.profileMediaID)).limit(1)
-            if (oldMedia?.mediaType === "artist_profile" && !otherArtist) {
-                await deleteFile(oldMedia.objectKey)
-                await db.delete(mediaTable).where(eq(mediaTable.id, oldMedia.id))
-            }
-        } catch (error) {
-            console.error("Could not remove the previous artist photo", error)
-        }
+        await deleteUnusedArtistPhoto(existingArtist.profileMediaID)
     }
 
     revalidatePath("/artists")
@@ -259,6 +250,48 @@ export async function postArtist(formdata: FormData) {
     revalidatePath("/")
     revalidatePath("/show/[slug]", "page")
     return savedArtist
+}
+
+export async function deleteArtist(formData: FormData) {
+    await requireUser()
+
+    const value = formData.get("id")
+    const id = typeof value === "string" && value.trim() ? Number(value) : NaN
+    if (!Number.isSafeInteger(id) || id < 1) throw new Error("Invalid artist ID")
+
+    const [, deletedArtists] = await db.batch([
+        db.delete(showsArtistsTable).where(eq(showsArtistsTable.artistID, id)),
+        db.delete(artistsTable).where(eq(artistsTable.id, id)).returning({
+            slug: artistsTable.slug,
+            profileMediaID: artistsTable.profileMediaID,
+        }),
+    ])
+    const [artist] = deletedArtists
+    if (!artist) throw new Error("Artist not found")
+
+    if (artist.profileMediaID) await deleteUnusedArtistPhoto(artist.profileMediaID)
+
+    revalidatePath("/artists")
+    revalidatePath(`/artists/${artist.slug}`)
+    revalidatePath("/")
+    revalidatePath("/show/[slug]", "page")
+    redirect("/artists")
+}
+
+async function deleteUnusedArtistPhoto(mediaID: number) {
+    try {
+        const [media] = await db.select().from(mediaTable).where(eq(mediaTable.id, mediaID))
+        const [artist] = await db.select({ id: artistsTable.id }).from(artistsTable)
+            .where(eq(artistsTable.profileMediaID, mediaID)).limit(1)
+        const [show] = await db.select({ id: showsTable.id }).from(showsTable)
+            .where(eq(showsTable.posterMediaID, mediaID)).limit(1)
+        if (media?.mediaType === "artist_profile" && !artist && !show) {
+            await deleteFile(media.objectKey)
+            await db.delete(mediaTable).where(eq(mediaTable.id, mediaID))
+        }
+    } catch (error) {
+        console.error("Could not remove the artist photo", error)
+    }
 }
 /** 
  * Not form data, but needs auth
