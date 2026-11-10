@@ -1,9 +1,7 @@
 "use client";
 import { addPicsToGallery, deleteMediaByObjectKey } from "@/lib/actions";
 import { useEditMode } from "./EditModeProvider";
-import { CaretRightIcon, XIcon } from "../Icons";
-import { Collapsible } from "@base-ui/react";
-import { useFormStatus } from "react-dom";
+import { XIcon } from "../Icons";
 import { uploadMediaToCloudflare } from "@/lib/helpers";
 import EditForm from "./EditForm";
 
@@ -19,7 +17,6 @@ const submitGalleryPhotoUpload = async (formData: FormData) => {
 
     formData.delete("files")
     await addPicsToGallery(formData)
-
 }
 
 
@@ -45,7 +42,7 @@ export function GalleryPhotoUploadCollapsible({showID}: { showID: number }) {
             submitText={"Upload images"}
             fields={{
                 ...({ id: { type: "hidden" as const, value: showID } }),
-                poster: {
+                files: {
                     type: "file", label: "Upload files from your device",
                     accept: "image/jpeg,image/png,image/webp",
                     help: "JPG, PNG or WebP.",

@@ -11,6 +11,7 @@ type FormAction = (formData: FormData) => Promise<void>;
 type EditField =
     | { type: "hidden"; value: string | number }
     | { type: "custom"; label: string; content: ReactNode }
+    | { type: "checkbox"; label: string; defaultChecked?: boolean }
     | {
         type: "text" | "url" | "datetime-local" | "textarea" | "file";
         label: string;
@@ -73,6 +74,14 @@ export default function EditForm({ title, fields, action, submitText, deleteActi
                             }
                             if (field.type === "custom") {
                                 return <label key={name} className="flex flex-col my-1 gap-1 text-base text-white/80">{field.label}{field.content}</label>;
+                            }
+                            if (field.type === "checkbox") {
+                                return (
+                                    <label key={name} className="flex items-center gap-3 text-base text-white/80">
+                                        <input type="checkbox" name={name} value="true" defaultChecked={field.defaultChecked} className="size-4 accent-pink" />
+                                        {field.label}
+                                    </label>
+                                );
                             }
 
                             const helpId = field.help ? `${formId}-${name}-help` : undefined;

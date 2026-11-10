@@ -182,20 +182,83 @@ type AddArtistToDBProps = {
  * 
 */
 export async function postArtist(formdata: FormData) {
-    // parse formdata
-    const artist = {
-        name: getString("name", formdata), 
-        profileMediaID: getNum("profileMediaID", formdata), 
-        instagramHandle: getString("instagramHandle", formdata), 
-        instagramUrl: getString("instagramUrl", formdata), 
-        description: getString("description", formdata), 
-        featured: getString("featured", formdata) == "true"
+    await requireUser()
+
+    const idValue = formdata.get("id")
+    const id = idValue === null ? undefined : Number(idValue)
+    if (idValue !== null && (typeof idValue !== "string" || !Number.isSafeInteger(id) || !id || id < 1)) {
+        throw new Error("Invalid artist ID")
     }
-    const newArtist = await addArtistToDB(artist)
 
+    const name = getString("name", formdata).trim()
+    const slug = convertToSlug(name)
+    if (!name || name.length > 255 || !slug) throw new Error("Enter a valid artist name")
+
+    const instagramHandle = getString("instagramHandle", formdata).trim()
+    const instagramUrl = getString("instagramUrl", formdata).trim()
+    if (instagramUrl) {
+        const url = new URL(instagramUrl)
+        if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("Invalid Instagram link")
+    }
+
+    const values = {
+        name,
+        instagramHandle: instagramHandle || null,
+        instagramUrl: instagramUrl || null,
+        description: getString("description", formdata).trim() || null,
+        featured: formdata.get("featured") === "true",
+    }
+    const objectKey = formdata.get("profile-uuid")
+    if (objectKey !== null && (typeof objectKey !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(objectKey))) {
+        throw new Error("Invalid profile photo")
+    }
+
+    const [existingArtist] = id
+        ? await db.select().from(artistsTable).where(eq(artistsTable.id, id))
+        : []
+    if (id && !existingArtist) throw new Error("Artist not found")
+
+    let newMediaID: number | undefined
+    let savedArtist: typeof artistsTable.$inferSelect
+    try {
+        if (objectKey) {
+            const [media] = await db.insert(mediaTable)
+                .values({ objectKey, mediaType: "artist_profile" })
+                .returning()
+            newMediaID = media.id
+        }
+
+        const profile = newMediaID ? { profileMediaID: newMediaID } : {}
+        const [saved] = id
+            ? await db.update(artistsTable).set({ ...values, ...profile }).where(eq(artistsTable.id, id)).returning()
+            : await db.insert(artistsTable).values({ ...values, ...profile, slug }).returning()
+        if (!saved) throw new Error("Artist not found")
+        savedArtist = saved
+    } catch (error) {
+        if (newMediaID) await db.delete(mediaTable).where(eq(mediaTable.id, newMediaID))
+        if (objectKey) await deleteFile(objectKey)
+        throw error
+    }
+
+    if (newMediaID && existingArtist?.profileMediaID) {
+        try {
+            const [oldMedia] = await db.select().from(mediaTable).where(eq(mediaTable.id, existingArtist.profileMediaID))
+            const [otherArtist] = await db.select({ id: artistsTable.id }).from(artistsTable)
+                .where(eq(artistsTable.profileMediaID, existingArtist.profileMediaID)).limit(1)
+            if (oldMedia?.mediaType === "artist_profile" && !otherArtist) {
+                await deleteFile(oldMedia.objectKey)
+                await db.delete(mediaTable).where(eq(mediaTable.id, oldMedia.id))
+            }
+        } catch (error) {
+            console.error("Could not remove the previous artist photo", error)
+        }
+    }
+
+    revalidatePath("/artists")
+    revalidatePath(`/artists/${savedArtist.slug}`)
     revalidatePath("/")
-
-    return newArtist
+    revalidatePath("/show/[slug]", "page")
+    return savedArtist
 }
 /** 
  * Not form data, but needs auth
@@ -232,7 +295,6 @@ export async function addPicsToGallery(formData: FormData) {
     // parse formdata
     const showID = Number(formData.get("id") as string)
     const picUuids = formData.getAll('uuids') as string[];
-
     await addUuidsToMedia(picUuids, showID, "gallery_image")
     
     revalidatePath("/");

@@ -4,6 +4,7 @@ import InfiniteHeader from "../components/InfiniteHeader"
 import ArtistCard from "./ArtistCard"
 import { artistsTable } from "@/lib/db/schema"
 import { colors } from "@/lib/helpers"
+import ArtistEdit from "../components/edit/ArtistEdit"
 
 export default async function Artists() {
     const artists = await db.select()
@@ -21,6 +22,7 @@ export default async function Artists() {
             <div className="my-20 text-5xl"> coming soon...</div>
 
             <InfiniteHeader text="artists " repeats={1} direction="left" duration={25} />
+            <ArtistEdit />
             
 
             <div className="my-15 grid grid-cols-2 gap-x-3 gap-y-1">

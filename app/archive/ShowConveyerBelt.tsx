@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { gsap } from "gsap"
 import { useEffect, useRef } from "react";
-import { horizontalLoop } from "@/lib/helpers"
+import { horizontalLoop } from "@/lib/gsap"
 
 export default function ShowConveyerBelt({photos}: {photos: {id:number,src:string}[]}) {
     const trackRef = useRef<HTMLDivElement>(null);
