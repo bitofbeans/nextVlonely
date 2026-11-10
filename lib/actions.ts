@@ -32,18 +32,20 @@ const convertToSlug = (text: string) => {
     .replace(/[^\w\-]+/g, '') // remove all non-word characters
     .replace(/\-\-+/g, '-') // replace multiple hyphens with single hyphen
 }
-
-/**
- * Given valid FormData from the add/edit show form, modify the shows database 
- */
-export async function postShow(formData: FormData) {
-    // Check if authenticated
+const requireUser = async () => {
     const { data: session } = await auth.getSession();
     
     if (!session?.user) {
         throw new Error("Unauthorized")
     }
+    return session.user
+}
 
+/**
+ * Given valid FormData from the add/edit show form, modify the shows database 
+ */
+export async function postShow(formData: FormData) {
+    const user = await requireUser()
     // Construct show object
     const title = getString("title", formData)
     const show: typeof showsTable.$inferInsert = {
@@ -114,11 +116,7 @@ export async function postShow(formData: FormData) {
  *
  */
 export async function deleteShow(formData: FormData) {
-    const { data: session } = await auth.getSession();
-    
-    if (!session?.user) {
-        throw new Error("Unauthorized")
-    }
+    const user = await requireUser()
 
     const showID = getID(formData)
     if (showID) {
@@ -144,11 +142,8 @@ export async function deleteShow(formData: FormData) {
  * 
  */
 export async function deleteMediaByID(id: number) {
-    const { data: session } = await auth.getSession();
-    
-    if (!session?.user) {
-        throw new Error("Unauthorized")
-    }
+    const user = await requireUser()
+
     const [poster] = await db.select()
         .from(mediaTable)
         .where(eq(mediaTable.id, id))
@@ -160,11 +155,7 @@ export async function deleteMediaByID(id: number) {
  * 
  */
 export async function deleteMediaByObjectKey(objectKey: string) {
-    const { data: session } = await auth.getSession();
-    
-    if (!session?.user) {
-        throw new Error("Unauthorized")
-    }
+    const user = await requireUser()
 
     await deleteFile(objectKey)
 
@@ -189,11 +180,8 @@ type AddArtistToDBProps = {
  * Returns newly created artist data
 */
 export async function addArtistToDB({name, profileMediaID, instagramHandle, instagramUrl, description}: AddArtistToDBProps) {
-    const { data: session } = await auth.getSession();
-    
-    if (!session?.user) {
-        throw new Error("Unauthorized")
-    }
+    const user = await requireUser()
+
     const [newArtist] = await db.insert(artistsTable)
         .values({
             name: name,
@@ -213,8 +201,7 @@ export async function addArtistToDB({name, profileMediaID, instagramHandle, inst
  * Add media to database
  */
 export async function addMediaToDB(uuid: string, showID: number, type: typeof mediaTable.$inferInsert["mediaType"], poster: boolean = false) {
-    const { data: session } = await auth.getSession();
-    if (!session?.user) { throw new Error("Unauthorized") }
+    const user = await requireUser()
     // add to file to db
     const [newMedia] = await db.insert(mediaTable)
         .values({ objectKey: uuid, showID: showID, mediaType: type })
@@ -233,11 +220,8 @@ export async function addMediaToDB(uuid: string, showID: number, type: typeof me
  * Adds many files to gallery for a certain show
  */
 export async function addPicsToGallery(formData: FormData) {
-    const { data: session } = await auth.getSession()
-
-    if (!session?.user) {
-        throw new Error("Unauthorized")
-    }
+    const user = await requireUser()
+    
     const idString = formData.get("id") as string
     const id = Number(idString)
 

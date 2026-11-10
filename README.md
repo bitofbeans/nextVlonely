@@ -112,4 +112,25 @@ Recreate frontend, make an interactive 3d version where each page is a different
 
 - The home page hero is intentionally one full stage height.
 
-## Goals
+
+## One-time R2 image conversion
+
+New image conversion script 
+- finds JPEGs by their contents 
+- resizes them to at most 2048 pixels on the longest side using Lanczos3 
+- compresses them to WebP of at most 500,000 bytes,
+- keeps the original object keys 
+- !skips non-JPEG objects!
+
+Preview the conversions and sizes:
+
+```sh
+node scripts/optimize-r2-images.mjs
+```
+
+To actually replace the JPEGs, choose a **new**, secure local backup directory whose parent already exists:
+
+```sh
+node scripts/optimize-r2-images.mjs --write --backup-dir /absolute/path/to/new-r2-backup
+```
+
