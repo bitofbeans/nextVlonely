@@ -1,5 +1,4 @@
 "use client"
-import { useEffect, useRef, useState } from "react";
 
 type InfiniteHeaderProps = {
     text: string,
@@ -21,21 +20,6 @@ type InfiniteHeaderProps = {
 
 export default function InfiniteHeader({ text, repeats, direction, duration, buttonText, buttonLink, buttonColor }: InfiniteHeaderProps) {
     const fullString = (text + " ").repeat(15)
-
-    // const buttonTextRef = useRef(null)
-    // const [lines, setLines] = useState(repeats)
-
-    // useEffect(() => {
-    //     const buttonElement = buttonTextRef.current
-    //     if (buttonElement) {
-    //         const lineHeight = window.getComputedStyle(buttonElement).lineHeight
-    //         const scrollHeight = buttonElement.scrollHeight
-    //         const buttonLines = Math.round(scrollHeight / parseFloat(lineHeight))
-    //         setLines(Math.max(repeats, buttonLines))
-    //         console.log(lines)
-    //     }
-    // }, [])
-
 
     const animationClass = direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'
 	return (

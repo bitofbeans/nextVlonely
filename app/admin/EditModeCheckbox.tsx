@@ -1,6 +1,6 @@
 "use client"
 import { Checkbox } from '@base-ui/react/checkbox'
-import { useEditMode } from "../components/EditModeProvider"
+import { useEditMode } from "../components/edit/EditModeProvider"
 import { CheckboxIcon } from '../components/Icons'
 
 

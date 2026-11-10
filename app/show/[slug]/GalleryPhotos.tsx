@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteGalleryImageButton } from "@/app/components/ShowEdit";
+import { DeleteGalleryImageButton } from "@/app/components/edit/GalleryEdit";
 import Image from "next/image";
 import { useState } from "react";
 

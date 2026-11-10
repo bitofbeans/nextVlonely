@@ -1,6 +1,6 @@
 import { queryShowGalleryPhotos } from "@/lib/queries";
 import { getMediaUrl } from "@/lib/media";
-import { GalleryPhotoUpload } from "../../components/ShowEdit";
+import { GalleryPhotoUploadCollapsible } from "../../components/edit/GalleryEdit";
 import GalleryPhotos from "./GalleryPhotos";
 
 export default async function Gallery({ showID }: { showID: number }) {
@@ -13,7 +13,7 @@ export default async function Gallery({ showID }: { showID: number }) {
 
     return (
         <div className="my-15 max-w-full w-[min(92vw,50rem)]">
-            <GalleryPhotoUpload showID={showID} />
+            <GalleryPhotoUploadCollapsible showID={showID} />
             {galleryPhotos.length > 0 ? (
                 <GalleryPhotos photos={galleryPhotos} />
             ) : (

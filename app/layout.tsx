@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image"
 import localFont from 'next/font/local'
 import Nav from "./components/NavBar";
-import { EditModeProvider } from "./components/EditModeProvider";
+import { EditModeProvider } from "./components/edit/EditModeProvider";
 
 // Caches the page for at least 10 minutes
 // After that, when someone opens the page, it will be stale, but trigger a refresh

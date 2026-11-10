@@ -5,8 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { getMediaUrl } from "@/lib/media"
-import { ShowEditCollapsible } from "@/app/components/ShowEdit"
-import { ArtistOptionProvider } from "@/app/components/ArtistOptionsProvider"
+import { ShowEditCollapsible } from "@/app/components/edit/ShowEdit"
+import { ArtistOptionProvider } from "@/app/components/edit/ArtistOptionsProvider"
 import Gallery from "./Gallery"
 import { colors, dateFormat } from "@/lib/helpers"
 

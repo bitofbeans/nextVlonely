@@ -1,8 +1,8 @@
 import Hero from "../components/Hero"
 import InfiniteHeader from "../components/InfiniteHeader"
 import { queryArtistOptions, queryShows } from "@/lib/queries"
-import { ArtistOptionProvider } from "../components/ArtistOptionsProvider"
-import { ShowEditCollapsible } from "../components/ShowEdit"
+import { ArtistOptionProvider } from "../components/edit/ArtistOptionsProvider"
+import { ShowEditCollapsible } from "../components/edit/ShowEdit"
 import ShowCard from "./ShowCard"
 
 

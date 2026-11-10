@@ -24,7 +24,7 @@ export const ArtistOptionProvider = ({ children, artistOptions }: ArtistOptionPr
     const [artists, setArtists] = useState(artistOptions)
     
     const createArtistInOptions = async (name: string) => {
-        const newArtist = await addArtistToDB({name})
+        const newArtist = await addArtistToDB({ name }) as Artist
         setArtists([
             ...artists,
             newArtist
