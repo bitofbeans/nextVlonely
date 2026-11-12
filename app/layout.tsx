@@ -5,6 +5,7 @@ import Image from "next/image"
 import localFont from 'next/font/local'
 import Nav from "./components/NavBar";
 import { EditModeProvider } from "./components/edit/EditModeProvider";
+import { SITE_URL } from "@/lib/site";
 
 // Caches the page for at least 10 minutes
 // After that, when someone opens the page, it will be stale, but trigger a refresh
@@ -46,7 +47,7 @@ const elgoc = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vlfriends.com"),
+  metadataBase: new URL(SITE_URL),
 
   title: {
     default: "vlonely&friends | Underground Shows & Events",
