@@ -12,7 +12,7 @@ export default function ArtistCard({name, slug, src, color, className}: ArtistCa
     if (src != null) {
         return (
             <Link href={"/artists/" + slug} 
-            className={`lg:text-4xl md:text-3xl sm:text-3xl text-3xl underline underline-offset-8 decoration-1 text-${color} ${className}`}
+            className={`max-w-full overflow-x-auto whitespace-nowrap lg:text-4xl md:text-3xl sm:text-3xl text-3xl underline underline-offset-8 decoration-1 text-${color} ${className}`}
             >
                 {name}
             </Link>

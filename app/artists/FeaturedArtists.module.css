@@ -57,7 +57,8 @@
   font-size: clamp(2rem, 4vw, 3.75rem);
   line-height: 0.95;
   overflow-wrap: anywhere;
-  font-family: harmond;
+  font-family: var(--font-harmond-local);
+  font-weight: 700;
 }
 
 .echo .portrait {
@@ -72,7 +73,7 @@
   display: grid;
   height: 100%;
   place-items: center;
-  font-family: var(--font-harmond);
+  font-family: var(--font-harmond-local);
   font-size: calc(var(--portrait-size) * 0.55);
   color: #f92f83;
 }

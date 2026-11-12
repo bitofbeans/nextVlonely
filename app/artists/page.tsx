@@ -25,11 +25,6 @@ export default async function Artists() {
         color: colors[index % colors.length],
     })))
 
-    const alignments = [
-        "place-self-start",
-        "place-self-end",
-        "place-self-center",
-    ]
     return(
         <div className="flex flex-col items-center max-w-full">
             <Hero size={"narrow"} source="/SVG/artistsHero.svg"></Hero>
@@ -44,15 +39,19 @@ export default async function Artists() {
             <ArtistEdit />
             
 
-            <div className="my-15 grid grid-cols-2 gap-x-3 gap-y-1">
-                {artists.map((artist, index) => (
-                    <ArtistCard key={index}
-                    name={artist.name} 
-                    slug={artist.slug}
-                    src={""}
-                    color={colors[index % colors.length]}
-                    className={alignments[index % 2]}
-                    />
+            <div className="my-15 flex w-full max-w-3xl flex-col gap-y-1 px-4">
+                {artists.filter((_, index) => index % 2 === 0).map((artist, pairIndex) => (
+                    <div key={artist.id} className="flex flex-wrap items-baseline gap-x-3">
+                        {artists.slice(pairIndex * 2, pairIndex * 2 + 2).map((member, index) => (
+                            <ArtistCard key={member.id}
+                                name={member.name}
+                                slug={member.slug}
+                                src={""}
+                                color={colors[(pairIndex * 2 + index) % colors.length]}
+                                className={index === 1 ? "ml-auto" : ""}
+                            />
+                        ))}
+                    </div>
                 ))}
             </div>
         </div>
