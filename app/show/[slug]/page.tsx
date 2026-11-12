@@ -24,7 +24,7 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
     return (
         <ArtistOptionProvider artistOptions={artistOptions}>
             <div className="mx-auto flex w-[92vw] max-w-6xl flex-col items-center pt-48 xxs:pt-32 md:pt-36">
-                <BackButton className="mb-4 self-start py-2 font-harmond text-xl text-pink hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink" />
+                <BackButton />
                 <h1 className="sr-only">{title}</h1>
                 <div aria-hidden="true" className="w-screen min-w-0">
                     <InfiniteHeader text={title} repeats={1} direction="right" duration={60} />
@@ -45,12 +45,12 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
                     <div className="flex min-w-0 flex-col gap-6 md:gap-8">
                         <section aria-label="Show details" className="rounded-2xl border border-white/15 bg-white/3 px-6 py-7 sm:px-8 sm:py-8">
                             <h2 className={eyebrowClassName}>Date</h2>
-                            <p className="mt-3 font-elgoc text-2xl leading-snug text-white [overflow-wrap:anywhere] sm:text-3xl">
+                            <p className="mt-3 font-elgoc text-2xl leading-snug text-white wrap-anywhere sm:text-3xl">
                                 {dateFormat(date)}
                             </p>
                             <hr className="my-6 border-white/30" />
                             <h2 className={eyebrowClassName}>Venue</h2>
-                            <p className="mt-3 font-elgoc text-2xl leading-snug text-white [overflow-wrap:anywhere] sm:text-3xl">
+                            <p className="mt-3 font-elgoc text-2xl leading-snug text-white wrap-anywhere sm:text-3xl">
                                 {venue}
                             </p>
                         </section>
@@ -63,7 +63,7 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
                                     <li key={artist.id}>
                                         <Link
                                             href={`/artists/${artist.slug}`}
-                                            className={`${artistColors[index % artistColors.length]} [overflow-wrap:anywhere] decoration-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current`}
+                                            className={`${artistColors[index % artistColors.length]} wrap-anywhere decoration-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current`}
                                         >
                                             {artist.name}
                                         </Link>
@@ -79,7 +79,7 @@ export default async function Show({ params }: { params: Promise<{ slug: string 
                         DESCRIPTION
                     </h2>
                     <div className="p-6">
-                        <p className="mx-auto max-w-lg font-elgoc text-xl leading-relaxed whitespace-pre-wrap [overflow-wrap:anywhere]">
+                        <p className="mx-auto max-w-lg font-elgoc text-xl leading-relaxed whitespace-pre-wrap wrap-anywhere">
                             {description}
                         </p>
                     </div>

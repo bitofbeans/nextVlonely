@@ -27,6 +27,7 @@ const mapArtistDataToOptions = (artistData: Artist[] | undefined): ArtistOption[
 
 export default function ArtistMultiSelect({ defaultArtists }: { defaultArtists: Artist[] | undefined }) {
     const [isLoading, setIsLoading] = useState(false)
+    const [createError, setCreateError] = useState("")
     const {artists, createArtistInOptions} = useArtistOptions()
     const [selectedOptions, setSelectedOptions] = useState<MultiValue<ArtistOption> | null>(mapArtistDataToOptions(defaultArtists))
 
@@ -34,8 +35,15 @@ export default function ArtistMultiSelect({ defaultArtists }: { defaultArtists: 
 
     const handleCreate = async (inputValue: string) => {
         setIsLoading(true)
-        await createArtistInOptions(inputValue)
-        setIsLoading(false)
+        setCreateError("")
+        try {
+            const artist = await createArtistInOptions(inputValue)
+            setSelectedOptions((current) => [...(current ?? []), { label: artist.name, value: String(artist.id) }])
+        } catch {
+            setCreateError("Could not create the artist. Please try again.")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const artistIDs: string[] = selectedOptions ? selectedOptions.map((artist) => artist.value) : []
@@ -97,7 +105,8 @@ export default function ArtistMultiSelect({ defaultArtists }: { defaultArtists: 
                     }),
                 }}
             />
-            <input name="artists" type="hidden" defaultValue={artistIDs}/>
+            {createError && <p role="alert" className="mt-2 text-sm text-pink">{createError}</p>}
+            <input name="artists" type="hidden" value={artistIDs.join(",")}/>
 
         </div>
     )

@@ -313,6 +313,11 @@ export async function addArtistToDB({name, profileMediaID, instagramHandle, inst
         })
         .returning()
 
+    revalidatePath("/artists")
+    revalidatePath("/")
+    revalidatePath("/archive")
+    revalidatePath("/show/[slug]", "page")
+
     return newArtist
 }
 

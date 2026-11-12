@@ -10,7 +10,7 @@ type Artist = typeof artistsTable.$inferSelect
 
 type ArtistsOptionContextType = {
     artists: Artist[],
-    createArtistInOptions: (name: string) => void
+    createArtistInOptions: (name: string) => Promise<Artist>
 }
 
 const ArtistOptionContext = createContext<ArtistsOptionContextType | undefined>(undefined)
@@ -24,11 +24,9 @@ export const ArtistOptionProvider = ({ children, artistOptions }: ArtistOptionPr
     const [artists, setArtists] = useState(artistOptions)
     
     const createArtistInOptions = async (name: string) => {
-        const newArtist = await addArtistToDB({ name }) as Artist
-        setArtists([
-            ...artists,
-            newArtist
-        ])
+        const newArtist = await addArtistToDB({ name })
+        setArtists((current) => [...current, newArtist])
+        return newArtist
     }
 
     return (

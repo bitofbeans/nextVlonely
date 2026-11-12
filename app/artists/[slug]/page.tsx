@@ -22,10 +22,10 @@ export default async function Artist({ params }: { params: Promise<{ slug: strin
         : []
 
     return(
-        <div className="flex flex-col items-center justify-center w-full min-h-[90vh] py-12">
+        <div className="flex flex-col items-center justify-center w-full min-h-[90vh] pb-12 pt-48 xxs:pt-32 md:pt-36">
             <div className="flex flex-col w-full max-w-3xl px-4">
 
-                <BackButton className={"px-5 py-2"} />
+                <BackButton />
                 <ArtistEdit artist={artistData} />
 
                 <section className="flex flex-col items-center border border-white/15 rounded-2xl bg-white/3 p-6 w-full font-harmond font-black">

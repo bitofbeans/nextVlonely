@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from 'next/navigation'  // Usage: App router
 
-export default function BackButton({className}: {className: string}) {
+export default function BackButton() {
     const router = useRouter()
 
     const handleBack = () => {
@@ -13,6 +13,6 @@ export default function BackButton({className}: {className: string}) {
     };
 
     return (
-        <button onClick={handleBack} className={`cursor-pointer max-w-max ${className}`}>&larr; back</button>
+        <button onClick={handleBack} className="mb-4 max-w-max cursor-pointer self-start py-2 font-harmond text-xl text-pink hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink">&larr; back</button>
     )
 }
