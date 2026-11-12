@@ -39,9 +39,9 @@ export default async function Artists() {
             <ArtistEdit />
             
 
-            <div className="my-15 flex w-full max-w-3xl flex-col gap-y-1 px-4">
+            <div className="my-15 flex w-max max-w-full flex-col gap-y-1 px-4">
                 {artists.filter((_, index) => index % 2 === 0).map((artist, pairIndex) => (
-                    <div key={artist.id} className="flex flex-wrap items-baseline gap-x-3">
+                    <div key={artist.id} className="flex flex-wrap items-baseline gap-x-6 sm:gap-x-12 md:gap-x-16">
                         {artists.slice(pairIndex * 2, pairIndex * 2 + 2).map((member, index) => (
                             <ArtistCard key={member.id}
                                 name={member.name}

@@ -19,10 +19,16 @@ export default function FeaturedArtists({ artists }: { artists: FeaturedArtist[]
 
     useEffect(() => {
         const media = gsap.matchMedia(container)
-        media.add("(prefers-reduced-motion: no-preference)", () => {
+        media.add({
+            mobile: "(max-width: 767px)",
+            desktop: "(min-width: 768px)",
+            motion: "(prefers-reduced-motion: no-preference)",
+        }, (context) => {
+            if (!context.conditions?.motion) return
+            const duration = context.conditions.mobile ? 1 : 0.5
             const rows = gsap.utils.toArray<HTMLElement>("[data-featured-row]").flatMap((row) => {
                 const strip = row.querySelector("[data-featured-strip]")
-                return strip ? [{ row, strip, moveX: gsap.quickTo(strip, "x", { duration: 0.05, ease: "power1.out" }) }] : []
+                return strip ? [{ row, strip, moveX: gsap.quickTo(strip, "x", { duration, ease: "power3.out" }) }] : []
             })
             let frame = 0
             const update = (immediate = false) => {
@@ -66,7 +72,7 @@ export default function FeaturedArtists({ artists }: { artists: FeaturedArtist[]
                                     {distance === 0 && <span className={styles.name} style={{ color: `var(--color-${artist.color})` }}>{artist.name}</span>}
                                     <div className={styles.portrait}>
                                         {artist.photo ? (
-                                            <Image src={artist.photo} alt="" fill sizes="(max-width: 600px) 58vw, 320px" className={styles.image} />
+                                            <Image src={artist.photo} alt="" fill loading="eager" sizes="(max-width: 600px) 58vw, 320px" className={styles.image} />
                                         ) : (
                                             <span className={styles.initial}>{artist.name.charAt(0)}</span>
                                         )}
