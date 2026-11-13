@@ -44,6 +44,7 @@ export function GalleryPhotoUploadCollapsible({showID}: { showID: number }) {
                 ...({ id: { type: "hidden" as const, value: showID } }),
                 files: {
                     type: "file", label: "Upload files from your device",
+                    multiple: true,
                     accept: "image/jpeg,image/png,image/webp",
                     help: "JPG, PNG or WebP.",
                 },
