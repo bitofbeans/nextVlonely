@@ -98,6 +98,6 @@ export async function queryShowGalleryPhotos(showID: number) {
                 eq(mediaTable.mediaType, "gallery_image")
             )
         )
-        
+        .orderBy(asc(mediaTable.id))
 
 }

@@ -72,7 +72,7 @@ export default function FeaturedArtists({ artists }: { artists: FeaturedArtist[]
                                     {distance === 0 && <span className={styles.name} style={{ color: `var(--color-${artist.color})` }}>{artist.name}</span>}
                                     <div className={styles.portrait}>
                                         {artist.photo ? (
-                                            <Image src={artist.photo} alt="" fill loading="eager" sizes="(max-width: 600px) 58vw, 320px" className={styles.image} />
+                                            <Image src={artist.photo} alt="" fill sizes="(max-width: 600px) 58vw, 320px" className={styles.image} />
                                         ) : (
                                             <span className={styles.initial}>{artist.name.charAt(0)}</span>
                                         )}

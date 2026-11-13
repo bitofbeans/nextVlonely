@@ -5,7 +5,7 @@ import { deleteFile } from '@/lib/media';
 import { showsTable, mediaTable, artistsTable, showsArtistsTable } from '@/lib/db/schema'
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 /*
     NEED TO BE ABLE TO
@@ -336,6 +336,52 @@ export async function addPicsToGallery(formData: FormData) {
     await addUuidsToMedia(picUuids, showID, "gallery_image")
     
     revalidatePath("/");
+}
+
+/** Move a gallery photo to the last existing gallery ID for its show. */
+export async function moveGalleryImageToBack(showID: number, objectKey: string) {
+    await requireUser()
+
+    if (!Number.isSafeInteger(showID) || showID < 1 || showID > 2147483647 ||
+        typeof objectKey !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(objectKey)) {
+        throw new Error("Invalid gallery image")
+    }
+
+    // IDs are global and may have gaps or belong to posters and other shows.
+    // Rotate the photo data through this show's existing gallery ID slots in
+    // one update, avoiding primary-key collisions and preserving references.
+    // Lock the gallery first so concurrent moves cannot overwrite each other.
+    await db.batch([
+        db.execute(sql`
+            SELECT id FROM media
+            WHERE show_id = ${showID} AND media_type = 'gallery_image'
+            ORDER BY id FOR UPDATE
+        `),
+        db.execute(sql`
+        WITH selected AS (
+            SELECT id FROM media
+            WHERE show_id = ${showID} AND object_key = ${objectKey}::uuid
+                AND media_type = 'gallery_image'
+        ), ordered AS (
+            SELECT id,
+                lead(object_key) OVER (ORDER BY id) AS next_key,
+                lead(upload_timestamp) OVER (ORDER BY id) AS next_timestamp,
+                first_value(object_key) OVER (ORDER BY id) AS first_key,
+                first_value(upload_timestamp) OVER (ORDER BY id) AS first_timestamp
+            FROM media
+            WHERE show_id = ${showID} AND media_type = 'gallery_image'
+                AND id >= (SELECT id FROM selected)
+        )
+        UPDATE media
+        SET object_key = coalesce(ordered.next_key, ordered.first_key),
+            upload_timestamp = coalesce(ordered.next_timestamp, ordered.first_timestamp)
+        FROM ordered
+        WHERE media.id = ordered.id
+        `),
+    ])
+
+    revalidatePath("/show/[slug]", "page")
+    revalidatePath("/archive")
 }
 
 async function addUuidsToMedia(uuids: string[], showID: number, type: typeof mediaTable.$inferInsert["mediaType"]) {

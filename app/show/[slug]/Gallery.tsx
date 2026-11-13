@@ -15,7 +15,7 @@ export default async function Gallery({ showID }: { showID: number }) {
         <div className="my-15 max-w-full w-[min(92vw,50rem)]">
             <GalleryPhotoUploadCollapsible showID={showID} />
             {galleryPhotos.length > 0 ? (
-                <GalleryPhotos photos={galleryPhotos} />
+                <GalleryPhotos photos={galleryPhotos} showID={showID} />
             ) : (
                 <div className="my-20 text-3xl text-center">
                     no photos yet...

@@ -1,9 +1,10 @@
 "use client";
-import { addPicsToGallery, deleteMediaByObjectKey } from "@/lib/actions";
+import { addPicsToGallery, deleteMediaByObjectKey, moveGalleryImageToBack } from "@/lib/actions";
 import { useEditMode } from "./EditModeProvider";
 import { XIcon } from "../Icons";
 import { uploadMediaToCloudflare } from "@/lib/helpers";
 import EditForm from "./EditForm";
+import { useState } from "react";
 
 const submitGalleryPhotoUpload = async (formData: FormData) => {
     
@@ -32,6 +33,34 @@ export function DeleteGalleryImageButton({objectKey}: {objectKey: string}) {
             <XIcon className="z-20" />
         </button>
     )
+}
+
+export function MoveGalleryImageToBackButton({showID, objectKey, isLast}: {showID: number; objectKey: string; isLast: boolean}) {
+    const { isEditMode } = useEditMode();
+    const [pending, setPending] = useState(false);
+    const [error, setError] = useState(false);
+    if (!isEditMode) return null;
+
+    const moveImage = async () => {
+        setPending(true);
+        setError(false);
+        try {
+            await moveGalleryImageToBack(showID, objectKey);
+        } catch {
+            setError(true);
+        } finally {
+            setPending(false);
+        }
+    };
+
+    return (
+        <>
+            <button type="button" className="cursor-pointer rounded-t-sm bg-gray-700 px-2 py-1 text-xs text-white disabled:cursor-default disabled:opacity-50" onClick={moveImage} disabled={pending || isLast}>
+                {pending ? "Moving..." : "Move to back"}
+            </button>
+            {error && <span role="alert" className="text-xs text-red-600">Could not move image. Try again.</span>}
+        </>
+    );
 }
 
 export function GalleryPhotoUploadCollapsible({showID}: { showID: number }) {
